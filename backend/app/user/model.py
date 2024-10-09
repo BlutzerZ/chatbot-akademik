@@ -1,5 +1,5 @@
 import uuid
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.dialects.postgresql import UUID # type: ignore
 from sqlalchemy import Column, Integer, String, Text, Date, Uuid # type: ignore
 from datetime import date
 from config.database import Base
