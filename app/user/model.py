@@ -1,13 +1,14 @@
+import uuid
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy import Column, Integer, String, Text, Date, Uuid # type: ignore
 from datetime import date
 from config.database import Base
 
 class User(Base):
-    # __tablename__ = 'anatomi'
+    __tablename__ = 'user'
     
-    # uuid = Column(Uuid, primary_key=True, )
-    # nama = Column(String(255), nullable=False)
-    # foto = Column(String(255))
-    # deskripsi = Column(Text)
-    # createdAt = Column(Date, default=date.today())
-    # updatedAt = Column(Date, default=date.today(), onupdate=date.today())
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True, nullable=False)
+    username = Column(String(255), nullable=False)
+    token = Column(String(255), nullable=False)
+    createdAt = Column(Date, default=date.today())
+    updatedAt = Column(Date, default=date.today(), onupdate=date.today())
