@@ -1,0 +1,45 @@
+services:
+  db:
+    container_name: db_chatakademik
+    image: postgres:latest
+    env_file:
+      - .env
+    expose:
+      - "${DB_PORT}"
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    command: -p ${DB_PORT}
+  web:
+    container_name: chatakademik
+    build: .
+    volumes:
+      - .:/app
+      - ./media:/media
+      - ./static:/static
+    expose:
+      - "${PORT}"
+    ports:
+      - "${PORT}:${PORT}"
+    env_file:
+      - .env
+    depends_on:
+      - db
+  # nginx:
+  #   build: ./nginx
+  #   volumes:
+  #     - ./static:/static
+  #     - ./media:/media
+  #     - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+  #   ports:
+  #     - "${NGINX_PORT}:${NGINX_PORT}"
+  #   depends_on:
+  #     - web
+
+volumes:
+  postgres_data:
