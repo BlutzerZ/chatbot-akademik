@@ -8,9 +8,9 @@ from sqlalchemy.orm import Session # type: ignore
 
 router = APIRouter()
 
-@router.get("/auth", response.UserAuthResponse, tags=["User"])
+@router.post("/auth", response_model=response.UserAuthResponse, tags=["User"])
 async def get_all_anatomi(
-        data: response.UserAuthResponse,
+        data: request.UserAuthRequest,
         session: Session = Depends(get_db)
     ):
     _service = UserService(session)

@@ -4,6 +4,12 @@ from pydantic import BaseModel # type: ignore
 
 class UserAuthResponse(BaseModel):
     token: str
-    
+     
     class Config:
         orm_mode = True 
+
+class ErrorResponse(BaseModel):
+    error: str
+
+    class Config:
+        orm_mode = True

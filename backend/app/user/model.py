@@ -1,6 +1,6 @@
 import uuid
 from sqlalchemy.dialects.postgresql import UUID # type: ignore
-from sqlalchemy import Column, Integer, String, Text, Date, Uuid, CHAR # type: ignore
+from sqlalchemy import Column, Integer, String, Text, DateTime, Uuid, CHAR # type: ignore
 from datetime import date
 from config.database import Base
 
@@ -11,5 +11,5 @@ class User(Base):
     id = Column(CHAR(36), primary_key=True, default=lambda: str(uuid.uuid4()), unique=True, nullable=False)
     username = Column(String(255), nullable=False)
     token = Column(String(255), nullable=False)
-    createdAt = Column(Date, default=date.today())
-    updatedAt = Column(Date, default=date.today(), onupdate=date.today())
+    createdAt = Column(DateTime, default=date.today())
+    updatedAt = Column(DateTime, default=date.today(), onupdate=date.today())

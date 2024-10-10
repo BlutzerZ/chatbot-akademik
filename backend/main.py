@@ -1,8 +1,8 @@
-from fastapi import FastAPI # type: ignore
+from fastapi import FastAPI
 from config import database
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.user.routes import router as user_router
+from app.user.routes import router
 
 database.Base.metadata.create_all(bind=database.engine)
 app = FastAPI()
@@ -15,4 +15,5 @@ app = FastAPI()
 #     allow_headers=["*"],
 # )
 
-app.include_router(user_router)
+
+app.include_router(router)
