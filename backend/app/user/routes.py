@@ -1,25 +1,17 @@
-from config.database import dbSession
+from typing import Union
+from app.user.service import UserService
+from config.database import get_db
 from helper.jwt import generate_token
-from app.user import models, request, response, 
-from fastapi import APIRouter
+from app.user import model, request, response
+from fastapi import APIRouter, Depends # type: ignore
+from sqlalchemy.orm import Session # type: ignore
 
 router = APIRouter()
 
-@router.get(
-        "/", 
-        response_model=list[response.AnatomiResponse], 
-        tags=["Anatomi"])
+@router.get("/auth", response.UserAuthResponse, tags=["User"])
 async def get_all_anatomi(
-        page: Union[int, None] = None,
-        limit: Union[int, None] = None,
+        data: response.UserAuthResponse,
+        session: Session = Depends(get_db)
     ):
-    db = database.dbSession()
-    
-    if page == None:
-        anatomis = db.query(models.Anatomi).limit(100 if limit == None else limit).all()
-    else:
-        offset = (page - 1) * limit
-        anatomis = db.query(models.Anatomi).offset(offset).limit(limit).all()
-
-    db.close()
-    return anatomis
+    _service = UserService(session)
+    return _service.auth(data)

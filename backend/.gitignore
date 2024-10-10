@@ -1,3 +1,4 @@
 .env.prod
 .env.dev
 venv
+__pycache__

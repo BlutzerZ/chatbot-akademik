@@ -4,7 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base # type: ignore
 from sqlalchemy.orm import sessionmaker # type: ignore
 import os
 
-env = os.getenv('ENVIRONMENT', 'prod')
+env = os.getenv('ENVIRONMENT', 'dev')
 if env == 'prod':
     load_dotenv('.env.prod')
 else:
@@ -20,5 +20,12 @@ DATABASE_URL = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB
 
 
 engine = create_engine(DATABASE_URL)
-dbSession = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+SessionLocal  = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
