@@ -1,15 +1,29 @@
-from datetime import date
+from datetime import date, datetime
 from pydantic import BaseModel # type: ignore
 
+class DetailResponse(BaseModel):
+    token: str
 
 class UserAuthResponse(BaseModel):
-    token: str
+    code: int
+    message: str
+    data: list[DetailResponse]
      
-    class Config:
-        orm_mode = True 
 
 class ErrorResponse(BaseModel):
     error: str
 
+
+class UserDetail(BaseModel):
+    username: str
+    created_at: datetime
+    updated_at: datetime
+
     class Config:
-        orm_mode = True
+        from_attributes = True
+
+
+class UserDetailResponse(BaseModel):
+    code: int
+    message: str
+    data: list[UserDetail]

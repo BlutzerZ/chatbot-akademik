@@ -21,6 +21,7 @@ class UserService:
             "password": data.password,
         })
         if r.status_code == 200:
+            userMessage = ""
             user = self.session.query(User).filter(User.username == data.username).first()
             if not user:
                 try:
@@ -31,6 +32,7 @@ class UserService:
                     self.session.add(user)
                     self.session.commit()
                     self.session.refresh(user)
+                    userMessage = "created user |"
                 except:
                     self.session.rollback()
                     raise
@@ -40,7 +42,15 @@ class UserService:
                 "username": user.username
             })
 
-            return response.UserAuthResponse(token=token)
+            return response.UserAuthResponse(
+                code=200,
+                message=f"{userMessage} Authentication Valid" ,
+                data=[{"token": token}]
+            )
         
         else:
             raise HTTPException(status_code=401, detail="unathorize")
+
+    def get_user_detail(self, jwtData) -> User:
+        user = self.session.query(User).filter_by(id=jwtData['id']).first()
+        return user
