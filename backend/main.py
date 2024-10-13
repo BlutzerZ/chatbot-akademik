@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.user.routes import router
 
-database.Base.metadata.create_all(bind=database.engine)
+database.Base.metadata.create_all(bind=database.engine)  
 app = FastAPI()
 
 # app.add_middleware(
