@@ -2,7 +2,7 @@
 FROM python:3.12
 
 # Add user that will be used in the container.
-RUN useradd chatakad
+RUN useradd academicchat
 
 # Set environment variables.
 # 1. Force Python stdout and stderr streams to be unbuffered.
@@ -20,13 +20,13 @@ WORKDIR /app
 # Set this directory to be owned by the "wagtail" user. This Wagtail project
 # uses SQLite, the folder needs to be owned by the user that
 # will be writing to the database file.
-RUN chown chatakad:chatakad /app
+RUN chown academicchat:academicchat /app
 
 # Copy the source code of the project into the container.
-COPY --chown=chatakad:chatakad . .
+COPY --chown=academicchat:academicchat . .
 
 # Use user "wagtail" to run the build commands below and the server itself.
-USER chatakad
+USER academicchat
 
 # Collect static files.
 # RUN python manage.py collectstatic --noinput --clear

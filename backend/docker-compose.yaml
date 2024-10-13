@@ -1,11 +1,11 @@
 services:
   db:
-    container_name: db_chatakademik
+    container_name: db_academicchat
     image: postgres:latest
     env_file:
       - .env
     expose:
-      - "${DB_PORT}"
+      - ${DB_PORT}
     ports:
       - "${DB_PORT}:${DB_PORT}"
     environment:
@@ -16,7 +16,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
     command: -p ${DB_PORT}
   web:
-    container_name: chatakademik
+    container_name: academicchat
     build: .
     volumes:
       - .:/app
