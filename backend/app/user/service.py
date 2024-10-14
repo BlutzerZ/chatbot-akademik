@@ -42,6 +42,7 @@ class UserService:
                 "username": user.username
             })
 
+
             return response.UserAuthResponse(
                 code=200,
                 message=f"{userMessage} Authentication Valid" ,

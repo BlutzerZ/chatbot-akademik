@@ -62,7 +62,7 @@ class GenerationLog(Base):
 
 
 class Feedback(Base):
-    __tablename__ = 'generation_log'
+    __tablename__ = 'feedback'
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid7, unique=True, nullable=False)
     score = Column(Float(), nullable=False)

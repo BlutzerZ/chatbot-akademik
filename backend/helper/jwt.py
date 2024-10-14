@@ -9,7 +9,8 @@ else:
     load_dotenv('.env.dev')
 
 def generate_token(data):
-    data['exp'] = datetime.datetime.now(tz=datetime.timezone.utc) + datetime.timedelta(minutes=2)
+    data['id'] = str(data['id'])
+    data['exp'] = datetime.datetime.now(tz=datetime.timezone.utc) + datetime.timedelta(hours=10)
 
     token = jwt.encode(
         data, 
