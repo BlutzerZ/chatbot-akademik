@@ -14,4 +14,4 @@ class User(Base):
     created_at = Column(DateTime, default=datetime.today())
     updated_at = Column(DateTime, default=datetime.today(), onupdate=datetime.today())
 
-    # conversations = relationship('Conversation', backref='user')
+    conversations = relationship('Conversation', backref='user')

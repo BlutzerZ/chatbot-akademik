@@ -51,5 +51,5 @@ class ConversationDetail(BaseModel):
         arbitrary_types_allowed = True
 
 
-class CreateConversationRequest(BaseModel):
+class CreateConversationOrMessageRequest(BaseModel):
     message: str

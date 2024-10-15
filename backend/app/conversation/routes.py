@@ -27,10 +27,10 @@ async def get_all_conversation(
 
 
 
-@router.post("/conversation", dependencies=[Depends(middleware.JWTBearer())], response_model=response.CreateConversationResponse, tags=["Conversation"])
+@router.post("/conversation", dependencies=[Depends(middleware.JWTBearer())], response_model=response.CreateConversationOrMessageResponse, tags=["Conversation"])
 async def create_conversation(
         request: Request,
-        data: request.CreateConversationRequest,
+        data: request.CreateConversationOrMessageRequest,
         session: Session = Depends(get_db),
     ):
 
@@ -40,7 +40,7 @@ async def create_conversation(
     if e != None:
         raise HTTPException(status_code=501, detail=str(e))
 
-    return response.CreateConversationResponse(code=200, message="Showing all message", data=messages)
+    return response.CreateConversationOrMessageResponse(code=200, message="Showing all message", data=messages)
 
 
 
@@ -62,37 +62,61 @@ async def get_conversation_by_id(
 
 
 
-# @router.get("/conversation/{convesation_id}/messages", dependencies=[Depends(jwt.JWTBearer())], response_model=response.UserDetailResponse, tags=["User"])
-# async def user_detail(
-#         request: Request,
-#         session: Session = Depends(get_db)
-#     ):
+@router.get("/conversation/{convesation_id}/messages", dependencies=[Depends(middleware.JWTBearer())], response_model=response.GetConversationByIDWithMessageResponse, tags=["Conversation"])
+async def get_conversation_by_id_with_message(
+        request: Request,
+        conversation_id : UUID,
+        session: Session = Depends(get_db),
+    ):
+
+    _service = service.ConversationService(session)
+    e, conversation = _service.get_conversation_by_id(request.state.jwtData, conversation_id)
     
-#     return response.UserDetailResponse(code=200, message="Loh valid", data=[user_detail])
+    if e != None:
+        raise HTTPException(status_code=501, detail=str(e))
 
-
-
-# @router.post("/conversation/{convesation_id}/message", dependencies=[Depends(jwt.JWTBearer())], response_model=response.UserDetailResponse, tags=["User"])
-# async def user_detail(
-#         request: Request,
-#         session: Session = Depends(get_db)
-#     ):
     
-#     return response.UserDetailResponse(code=200, message="Loh valid", data=[user_detail])
+    return response.GetConversationByIDWithMessageResponse(code=200, message="Loh valid", data=[conversation])
 
 
 
-# @router.get("/conversation/{convesation_id}/message/{message_id}", dependencies=[Depends(jwt.JWTBearer())], response_model=response.UserDetailResponse, tags=["User"])
-# async def user_detail(
-#         request: Request,
-#         session: Session = Depends(get_db)
-#     ):
+@router.post("/conversation/{convesation_id}/message", dependencies=[Depends(middleware.JWTBearer())], response_model=response.CreateConversationOrMessageResponse, tags=["Conversation"])
+async def create_message_by_coverstaion_id(
+        request: Request,
+        conversation_id : UUID,
+        data: request.CreateConversationOrMessageRequest,
+        session: Session = Depends(get_db)
+    ):
+
+    _service = service.ConversationService(session)
+    e, message = _service.create_message_by_conversation_id(request.state.jwtData, data.message, conversation_id)
+
+    if e != None:
+        raise HTTPException(status_code=501, detail=str(e))
     
-#     return response.UserDetailResponse(code=200, message="Loh valid", data=[user_detail])
+    return response.CreateConversationOrMessageResponse(code=200, message="Loh valid", data=message)
 
 
 
-# @router.post("/conversation/{convesation_id}/message/{message_id}/feedback", dependencies=[Depends(jwt.JWTBearer())], response_model=response.UserDetailResponse, tags=["User"])
+@router.get("/conversation/{convesation_id}/message/{message_id}", dependencies=[Depends(middleware.JWTBearer())], response_model=response.GetMessageByIDResponse, tags=["Conversation"])
+async def get_message_with_convetsation_id_and_message_id(
+        request: Request,
+        conversation_id : UUID,
+        message_id: UUID,
+        session: Session = Depends(get_db)
+    ):
+
+    _service = service.ConversationService(session)
+    e, message = _service.get_message_by_id(request.state.jwtData, message_id, conversation_id)
+
+    if e != None:
+        raise HTTPException(status_code=501, detail=str(e))
+    
+    return response.GetMessageByIDResponse(code=200, message="Loh valid", data=[message])
+
+
+
+# @router.post("/conversation/{convesation_id}/message/{message_id}/feedback", dependencies=[Depends(jwt.JWTBearer())], response_model=response.UserDetailResponse, tags=["Conversation"])
 # async def user_detail(
 #         request: Request,
 #         session: Session = Depends(get_db)

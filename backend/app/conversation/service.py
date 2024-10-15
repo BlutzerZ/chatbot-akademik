@@ -7,12 +7,32 @@ class ConversationService:
     def __init__(self, session: Session):
         self.session = session
 
+
+    def generate_text_from_ai_model(self, message, conversation) -> tuple[Exception, model.Message]:
+        try:
+            staticAIResponse = "static bang"
+            newAssistantMessage = model.Message(
+                role=model.RoleEnum.assistant,
+                content=staticAIResponse,
+                conversation_id = conversation.id,
+            )
+            self.session.add(newAssistantMessage)
+            self.session.commit()
+            self.session.refresh(conversation)
+
+            return None, newAssistantMessage
+        except Exception as e:
+            self.session.rollback()
+            return e, []
+        
+
     def get_all_conversations(self, jwtData, limit) -> list[model.Conversation]:
-        conversations = self.session.query(model.Conversation).filter_by(user_id=jwtData['id']).all()[:limit]
+        conversations = self.session.query(model.Conversation).filter_by(user_id=jwtData['id']).order_by(model.Conversation.updated_at.desc()).all()[:limit]
 
         return conversations
     
-    def create_conversation(self, jwtData, messsage) -> tuple[Exception, list[model.Message]]:
+
+    def create_conversation(self, jwtData, message, conversation_id) -> tuple[Exception, list[model.Message]]:
         # Try save message of user
         try:
             newConversation = model.Conversation(
@@ -24,7 +44,7 @@ class ConversationService:
             # User Message
             newMessage = model.Message(
                 role=model.RoleEnum.user,
-                content=messsage,
+                content=message,
                 conversation_id = newConversation.id,
             )
             self.session.add(newMessage)
@@ -34,33 +54,61 @@ class ConversationService:
             self.session.rollback()
             return e, []
 
-        #Try Generate AI response
+        # Generate AI response
+        e, newAssistantMessage = self.generate_text_from_ai_model(newConversation)
+
+        return e, [newMessage, newAssistantMessage]
+    
+    
+
+    def get_conversation_by_id(self, jwtData, id) -> tuple[Exception, list[model.Conversation]]:
         try:
-            responseMessage = "bla bla bla bbla blaa"
-            newAssistantMessage = model.Message(
-                role=model.RoleEnum.assistant,
-                content=responseMessage,
-                conversation_id = newConversation.id,
+            conversation = self.session.query(model.Conversation).filter_by(
+                id=id, 
+                user_id=jwtData['id'],
+                ).order_by(model.Conversation.updated_at.desc()).first()
+        except Exception as e:
+            return e, []
+
+        return None, conversation
+    
+    
+    def create_message_by_conversation_id(self, jwtData, message, id) -> tuple[Exception, list[model.Message]]:
+        try:
+            conversation = self.session.query(model.Conversation).filter_by(
+                id=id, 
+                user_id=jwtData['id'],
+                ).order_by(model.Conversation.updated_at.desc()).first()
+        except Exception as e:
+            return e, []
+        
+        try:
+            newMessage = model.Message(
+                role=model.RoleEnum.user,
+                content=message,
+                conversation_id = conversation.id,
             )
-            self.session.add(newAssistantMessage)
+            self.session.add(newMessage)
             self.session.commit()
-            self.session.refresh(newConversation)
+            self.session.refresh(conversation)
         except Exception as e:
             self.session.rollback()
             return e, []
+        
+        e, newAssistantMessage = self.generate_text_from_ai_model(message, conversation)
 
-        e = None
         return e, [newMessage, newAssistantMessage]
     
-    def get_conversation_by_id(self, jwtData, id) -> tuple[Exception, list[model.Conversation]]:
+    
+    def get_message_by_id(self, jwtData, messageID, conversationID) -> model.Message:
+        e, conversation = self.get_conversation_by_id(jwtData, conversationID)
+        
         try:
-            conversation = self.session.query(model.Conversation).filter_by(id=id, user_id=jwtData['id']).first()
+            message = self.session.query(model.Message).filter_by(
+                id=messageID, 
+                conversation=conversation,
+                ).first()
         except Exception as e:
             return e, []
-
-        print("=====================")
-        print(conversation)
-        print("=====================")
-
-
-        return None, conversation
+        
+        return e, message

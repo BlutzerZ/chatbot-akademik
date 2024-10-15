@@ -40,7 +40,7 @@ class GetAllConversationResponse(BaseModel):
     data: list[ConversationDetail]
 
 
-class CreateConversationResponse(BaseModel):
+class CreateConversationOrMessageResponse(BaseModel):
     code: int
     message: str
     data: list[MessageDetail]
@@ -58,4 +58,15 @@ class ConversationDetailWithMessage(BaseModel):
 class GetConversationByIDResponse(BaseModel):
     code: int
     message: str
+    data: list[ConversationDetail]
+
+class GetConversationByIDWithMessageResponse(BaseModel):
+    code: int
+    message: str
     data: list[ConversationDetailWithMessage]
+
+
+class GetMessageByIDResponse(BaseModel):
+    code: int
+    message: str
+    data: list[MessageDetail]
