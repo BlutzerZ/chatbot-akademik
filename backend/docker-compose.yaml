@@ -15,6 +15,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     command: -p ${DB_PORT}
+
   web:
     container_name: academicchat
     build: .
@@ -30,16 +31,19 @@ services:
       - .env
     depends_on:
       - db
-  # nginx:
-  #   build: ./nginx
-  #   volumes:
-  #     - ./static:/static
-  #     - ./media:/media
-  #     - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-  #   ports:
-  #     - "${NGINX_PORT}:${NGINX_PORT}"
-  #   depends_on:
-  #     - web
+
+  nginx:
+    build: ./nginx
+    volumes:
+      - ./static:/static
+      - ./media:/media
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "${NGINX_PORT}:${NGINX_PORT}"
+    depends_on:
+      - web
+
+
 
 volumes:
   postgres_data:
