@@ -10,7 +10,7 @@ class ConversationService:
 
     def generate_text_from_ai_model(self, message, conversation) -> tuple[Exception, model.Message]:
         try:
-            staticAIResponse = "static bang"
+            staticAIResponse = "Loh Gak Bahaya Ta?"
             newAssistantMessage = model.Message(
                 role=model.RoleEnum.assistant,
                 content=staticAIResponse,
@@ -32,7 +32,7 @@ class ConversationService:
         return conversations
     
 
-    def create_conversation(self, jwtData, message, conversation_id) -> tuple[Exception, list[model.Message]]:
+    def create_conversation(self, jwtData, message) -> tuple[Exception, list[model.Message]]:
         # Try save message of user
         try:
             newConversation = model.Conversation(
@@ -55,7 +55,7 @@ class ConversationService:
             return e, []
 
         # Generate AI response
-        e, newAssistantMessage = self.generate_text_from_ai_model(newConversation)
+        e, newAssistantMessage = self.generate_text_from_ai_model(message, newConversation)
 
         return e, [newMessage, newAssistantMessage]
     
