@@ -46,7 +46,7 @@ class UserService:
             return response.UserAuthResponse(
                 code=200,
                 message=f"{userMessage} Authentication Valid" ,
-                data=[{"token": token}]
+                data={"token": token}
             )
         
         else:

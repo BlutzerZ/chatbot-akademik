@@ -27,6 +27,8 @@ class MessageDetail(BaseModel):
     role: RoleEnum
     content: str
     conversation_id: UUID
+    created_at: datetime
+    updated_at: datetime
 
     class Config:
         from_attributes = True
@@ -43,7 +45,7 @@ class GetAllConversationResponse(BaseModel):
 class CreateConversationOrMessageResponse(BaseModel):
     code: int
     message: str
-    data: list[MessageDetail]
+    data: MessageDetail
 
 class ConversationDetailWithMessage(BaseModel):
     id: UUID
@@ -58,15 +60,15 @@ class ConversationDetailWithMessage(BaseModel):
 class GetConversationByIDResponse(BaseModel):
     code: int
     message: str
-    data: list[ConversationDetail]
+    data: ConversationDetail
 
 class GetConversationByIDWithMessageResponse(BaseModel):
     code: int
     message: str
-    data: list[ConversationDetailWithMessage]
+    data: list[MessageDetail]
 
 
 class GetMessageByIDResponse(BaseModel):
     code: int
     message: str
-    data: list[MessageDetail]
+    data: MessageDetail

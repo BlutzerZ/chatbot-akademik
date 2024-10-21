@@ -30,4 +30,4 @@ async def user_detail(
     user = _service.get_user_detail(request.state.jwtData)
     user_detail = response.UserDetail.from_orm(user)
     
-    return response.UserDetailResponse(code=200, message="Loh valid", data=[user])
+    return response.UserDetailResponse(code=200, message="Loh valid", data=user)
