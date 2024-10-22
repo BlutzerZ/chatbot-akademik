@@ -8,3 +8,7 @@ class UserAuthRequest(BaseModel):
     
     class Config:
         from_attributes = True 
+
+
+class RefreshTokenRequest(BaseModel):
+    token: str

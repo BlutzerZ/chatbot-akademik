@@ -57,6 +57,17 @@ class UserService:
         else:
             raise HTTPException(status_code=401, detail="unathorize")
 
+    def refresh_token(self, jwtData) -> response.UserAuthResponse:
+        try:
+            token = jwt.generate_token(jwtData)
+        except Exception as e:
+            return e, None
+        
+        print(token)
+        return None, token
+
+
+
     def get_user_detail(self, jwtData) -> User:
         user = self.session.query(User).filter_by(id=jwtData['id']).first()
         return user
