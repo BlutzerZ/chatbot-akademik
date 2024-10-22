@@ -45,7 +45,7 @@ class GetAllConversationResponse(BaseModel):
 class CreateConversationOrMessageResponse(BaseModel):
     code: int
     message: str
-    data: MessageDetail
+    data: list[MessageDetail]
 
 class ConversationDetailWithMessage(BaseModel):
     id: UUID
