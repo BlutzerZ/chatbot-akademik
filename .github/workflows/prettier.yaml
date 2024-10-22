@@ -1,0 +1,34 @@
+name: Check Code with Prettier
+
+on:
+  push:
+    paths:
+      - 'frontend/**' # Trigger only when files in the ./frontend directory are changed
+  pull_request:
+    paths:
+      - 'frontend/**' # Run Prettier check on PRs affecting ./frontend files
+
+jobs:
+  format-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20' # Specify the node version you need
+
+      # Install Prettier
+      - name: Install Prettier
+        run: |
+          npm install prettier
+
+      # Run Prettier on the ./frontend directory
+      - name: Run Prettier
+        run: |
+          npx prettier --check "./frontend/**/*.{js,jsx,ts,tsx,css,scss,html,json,md}"

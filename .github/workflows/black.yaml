@@ -1,4 +1,4 @@
-name: Check Python Code with Black
+name: Check Code with Black
 
 on:
   push:
