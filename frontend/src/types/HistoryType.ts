@@ -1,4 +1,4 @@
 export type HistoryType = {
-      id: number;
-      date: string;
-}
+  id: number;
+  date: string;
+};
