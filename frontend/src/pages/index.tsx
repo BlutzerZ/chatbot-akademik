@@ -1,6 +1,9 @@
 import Link from "next/link";
+import handler from "./api/auth/signin";
 
 export default function LoginPage(){
+  
+  
   return(
     <div className="h-screen flex items-center justify-center">
       <div className="w-screen md:w-1/3">
@@ -28,7 +31,7 @@ export default function LoginPage(){
             </div>
 
             <div className="space-y-10">
-              <button type="submit" className="w-full py-3 bg-primary-700 text-white rounded-md">Login</button>
+              <button type="submit" onClick={handler} className="w-full py-3 bg-primary-700 text-white rounded-md">Login</button>
 
               <div className="mx-auto w-fit">
                 <Link href={"/"}>
