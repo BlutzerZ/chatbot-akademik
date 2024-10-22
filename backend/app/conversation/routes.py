@@ -40,7 +40,7 @@ async def create_conversation(
     if e != None:
         raise HTTPException(status_code=501, detail=str(e))
 
-    return response.CreateConversationOrMessageResponse(code=200, message="Showing all message", data=[messages])
+    return response.CreateConversationOrMessageResponse(code=200, message="Showing all message", data=messages)
 
 
 
