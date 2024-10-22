@@ -23,7 +23,7 @@ export default function InputFooter() {
               ></textarea>
 
               <button className="flex items-center justify-center rounded-full bg-primary-700 hover:bg-primary-800 m-2 p-5 w-2 h-2 max-h-fit">
-                <span className="material-symbols-outlined text-white flex items-center justify-center">
+                <span className="material-symbols-rounded text-white flex items-center justify-center">
                   arrow_upward
                 </span>
               </button>
@@ -53,7 +53,7 @@ export default function InputFooter() {
             ></textarea>
 
             <button className="flex items-center justify-center rounded-full bg-primary-700 hover:bg-primary-800 m-2 p-5 w-2 h-2 max-h-fit">
-              <span className="material-symbols-outlined text-white flex items-center justify-center">
+              <span className="material-symbols-rounded text-white flex items-center justify-center">
                 arrow_upward
               </span>
             </button>
