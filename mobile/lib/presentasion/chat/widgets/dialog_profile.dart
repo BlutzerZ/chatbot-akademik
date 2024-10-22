@@ -37,7 +37,7 @@ Future<dynamic> dialogProfile(BuildContext context) {
                         Navigator.pop(context);
                         final token = await AuthLocaldatasource().getToken();
 
-                        print('Token: $token');
+                        print('Token JWT: $token');
                       },
                     ),
                     ListTile(
