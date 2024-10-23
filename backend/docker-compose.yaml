@@ -40,6 +40,10 @@ services:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     ports:
       - "${NGINX_PORT}:${NGINX_PORT}"
+    environment:
+      - PORT=${PORT}
+      - NGINX_PORT=${NGINX_PORT}
+      - NGINX_DOMAIN=${NGINX_DOMAIN}
     depends_on:
       - web
 

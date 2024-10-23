@@ -8,7 +8,7 @@ class DetailResponse(BaseModel):
 class UserAuthResponse(BaseModel):
     code: int
     message: str
-    data: list[DetailResponse]
+    data: DetailResponse
      
 
 class ErrorResponse(BaseModel):
@@ -28,4 +28,4 @@ class UserDetail(BaseModel):
 class UserDetailResponse(BaseModel):
     code: int
     message: str
-    data: list[UserDetail]
+    data: UserDetail

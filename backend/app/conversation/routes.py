@@ -58,7 +58,7 @@ async def get_conversation_by_id(
         raise HTTPException(status_code=501, detail=str(e))
 
 
-    return response.GetConversationByIDResponse(code=200, message="Loh valid", data=[conversation])
+    return response.GetConversationByIDResponse(code=200, message="Loh valid", data=conversation)
 
 
 
@@ -76,7 +76,7 @@ async def get_conversation_by_id_with_message(
         raise HTTPException(status_code=501, detail=str(e))
 
     
-    return response.GetConversationByIDWithMessageResponse(code=200, message="Loh valid", data=[conversation])
+    return response.GetConversationByIDWithMessageResponse(code=200, message="Loh valid", data=conversation.messages)
 
 
 
@@ -112,7 +112,7 @@ async def get_message_with_convetsation_id_and_message_id(
     if e != None:
         raise HTTPException(status_code=501, detail=str(e))
     
-    return response.GetMessageByIDResponse(code=200, message="Loh valid", data=[message])
+    return response.GetMessageByIDResponse(code=200, message="Loh valid", data=message)
 
 
 
