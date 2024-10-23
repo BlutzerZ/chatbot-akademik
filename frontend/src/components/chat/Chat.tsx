@@ -9,7 +9,7 @@ type Props = {
   onRate?: (messageId: string, rating: ChatMessageRating) => void;
 };
 
-const Chat: FC = (props) => {
+const Chat: FC<Props> = (props) => {
   return (
     <div className={"flex flex-col " + (props.className || "")}>
       <div className="flex-1 overflow-x-auto">
