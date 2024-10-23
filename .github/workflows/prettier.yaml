@@ -28,10 +28,10 @@ jobs:
         run: |
           npm install prettier
 
-      # Install prettier-plugin-tailwindcss
-      - name: Install prettier-plugin-tailwindcss
+      # Install Prettier plugin dependencies
+      - name: Install Prettier plugin dependencies
         run: |
-          npm install -D prettier-plugin-tailwindcss
+          npm install -D prettier-plugin-tailwindcss daisyui
 
       # Run Prettier on the ./frontend directory
       - name: Run Prettier
