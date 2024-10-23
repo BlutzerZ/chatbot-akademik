@@ -6,16 +6,16 @@ type Props = {
   onPrompt?: (prompt: string) => void;
 };
 
-const ChatPrompt: FC<Props> = (props) => {
+const ChatPromptInput: FC<Props> = (props) => {
   return (
-    <div className={"join w-full"}>
+    <div className={"join w-full px-2 md:px-72 lg:mx-auto pb-5 lg:pb-20 pt-3 bg-primary"}>
       <input
         type="text"
         placeholder="Tanyakan sesuatu"
-        className="input join-item input-bordered input-primary flex-1"
+        className="input join-item input-primary focus:outline-none flex-1 rounded-2xl"
       />
       <button
-        className="btn btn-primary join-item"
+        className="btn btn-primary join-item rounded-2xl"
         onClick={() => props.onPrompt?.("Hello")}
       >
         <Icon name="send" />
@@ -24,4 +24,4 @@ const ChatPrompt: FC<Props> = (props) => {
   );
 };
 
-export default ChatPrompt;
+export default ChatPromptInput;
