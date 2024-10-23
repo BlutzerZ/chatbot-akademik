@@ -1,13 +1,9 @@
 import useThemeChanger from "@/hooks/useThemeToggle";
 import React, { FC } from "react";
 
-type Props = React.PropsWithChildren<{
-  className?: string;
-  activeChatId?: string;
-  onActiveChatIdChange?: (chatId: string) => void;
-}>;
+type Props = React.PropsWithChildren;
 
-const ChatLayout: FC<Props> = ({ className = "", ...props }) => {
+const ChatLayout: FC = ({ className = "", ...props }) => {
   const { theme, setTheme } = useThemeChanger();
   return (
     <div className="drawer h-screen md:drawer-open">

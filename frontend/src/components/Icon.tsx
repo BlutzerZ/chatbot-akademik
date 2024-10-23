@@ -6,7 +6,7 @@ type Props = {
   className?: string;
 };
 
-const Icon: FC<Props> = (props) => {
+const Icon: FC = (props) => {
   return (
     <span
       className={

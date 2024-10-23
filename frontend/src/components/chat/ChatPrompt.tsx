@@ -6,7 +6,7 @@ type Props = {
   onPrompt?: (prompt: string) => void;
 };
 
-const ChatPrompt: FC<Props> = (props) => {
+const ChatPrompt: FC = (props) => {
   return (
     <div className={"join w-full"}>
       <input
