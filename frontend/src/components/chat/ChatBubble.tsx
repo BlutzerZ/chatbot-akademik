@@ -6,7 +6,7 @@ type Props = ChatMessage & {
   onRate?: (rating: ChatMessageRating) => void;
 };
 
-const ChatMessageBubble: FC = (props) => {
+const ChatMessageBubble: FC<Props> = (props) => {
   return (
     <div
       className={`chat ${

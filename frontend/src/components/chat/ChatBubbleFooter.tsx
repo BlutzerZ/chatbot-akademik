@@ -10,7 +10,7 @@ type Props = {
   onRequestRegenerate?: () => void;
 };
 
-const ChatMessageBubbleFooter: FC = (props) => {
+const ChatMessageBubbleFooter: FC<Props> = (props) => {
   const isRated = props.rating !== undefined;
   const isThumbsUp = isRated && props.rating === 1;
   const isThumbsDown = isRated && props.rating === -1;
