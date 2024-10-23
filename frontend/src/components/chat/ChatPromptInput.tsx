@@ -8,7 +8,7 @@ type Props = {
 
 const ChatPromptInput: FC<Props> = (props) => {
   return (
-    <div className={"join w-full px-2 md:px-72 lg:mx-auto pb-5 lg:pb-20 pt-3 bg-primary"}>
+    <div className={"rounded-none relative z-10 join w-full px-2 md:px-72 lg:mx-auto pb-5 lg:pb-20 pt-3 shadow-[0px_-5px_40px_30px_rgba(var(--tw-bg-opacity),_100)] bg-base-100"}>
       <input
         type="text"
         placeholder="Tanyakan sesuatu"

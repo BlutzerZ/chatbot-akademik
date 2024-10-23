@@ -122,7 +122,7 @@ export default function ChatPage() {
         onRate={handleMessageRate}
         className="flex-1 overflow-y-auto"
       />
-      <ChatPromptInput className="z-50"/>
+      <ChatPromptInput className=""/>
     </ChatLayout>
   );
 }

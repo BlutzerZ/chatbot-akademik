@@ -25,34 +25,32 @@ const ChatLayout: FC<Props> = ({ className = "", ...props }) => {
         <label
           htmlFor="my-drawer-2"
           aria-label="close sidebar"
-          className="drawer-overlay"
+          className="drawer-overlay fixed"
         ></label>
 
-        <div className="flex w-full">
-          <div className="tooltip tooltip-right" data-tip="Home">
-            <button className="btn btn-ghost">
-              <Icon name="home"/>
-            </button>
+        <div className="h-full">
+          <div className="flex w-full bg-base-200 px-5 md:px-10 py-5">
+            {/* <div className="tooltip tooltip-right" data-tip="Buat percakapan baru"> */}
+              <button className="btn btn-ghost w-full text-lg justify-start">
+                <Icon name="edit_square"/>
+                Percakapan baru
+              </button>
+            {/* </div> */}
           </div>
-          <div className="tooltip tooltip-right" data-tip="Buat percakapan baru">
-            <button className="btn btn-ghost">
-              <Icon name="edit_square"/>
-            </button>
-          </div>
-        </div>
 
-        <ul className="menu min-h-full w-80 bg-base-200 p-4 text-base-content">
-          {Array.from({ length: 10 }).map((_, i) => (
-            <li key={i}>
-              <Link
-                href={`${process.env.NEXT_PUBLIC_HOST}/chat/${i}`}
-                className={props.activeChatId === i.toString() ? "active" : ""}
-              >
-                Item {i}
-              </Link>
-            </li>
-          ))}
-        </ul>
+          <ul className="menu min-h-full w-80 bg-base-200 p-4 text-base-content">
+            {Array.from({ length: 10 }).map((_, i) => (
+              <li key={i}>
+                <Link
+                  href={`${process.env.NEXT_PUBLIC_HOST}/chat/${i}`}
+                  className={props.activeChatId === i.toString() ? "active" : ""}
+                >
+                  Item {i}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
 
       </div>
       
