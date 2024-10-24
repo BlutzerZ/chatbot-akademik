@@ -112,17 +112,14 @@ export default function ChatPage() {
   };
 
   return (
-    <ChatLayout
-      activeChatId={chatId}
-      className="flex h-screen flex-col gap-2"
-    >
+    <ChatLayout activeChatId={chatId} className="flex h-screen flex-col gap-2">
       <ChatHeader />
       <Chat
         messages={messages}
         onRate={handleMessageRate}
         className="flex-1 overflow-y-auto"
       />
-      <ChatPromptInput className=""/>
+      <ChatPromptInput className="" />
     </ChatLayout>
   );
 }

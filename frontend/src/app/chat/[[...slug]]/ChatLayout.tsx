@@ -10,51 +10,50 @@ type Props = React.PropsWithChildren<{
 }>;
 
 const ChatLayout: FC<Props> = ({ className = "", ...props }) => {
-  return (<>
-    <div className="drawer h-screen md:drawer-open">
-      <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
+  return (
+    <>
+      <div className="drawer h-screen md:drawer-open">
+        <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
 
-      <div className="drawer-content h-screen overflow-x-hidden">
-        <div className={"h-full " + className}>
-          {props.children}
+        <div className="drawer-content h-screen overflow-x-hidden">
+          <div className={"h-full " + className}>{props.children}</div>
         </div>
-      </div>
 
-      <div className="drawer-side z-50">
+        <div className="drawer-side z-50">
+          <label
+            htmlFor="my-drawer-2"
+            aria-label="close sidebar"
+            className="drawer-overlay fixed"
+          ></label>
 
-        <label
-          htmlFor="my-drawer-2"
-          aria-label="close sidebar"
-          className="drawer-overlay fixed"
-        ></label>
-
-        <div className="h-full">
-          <div className="flex w-full bg-base-200 px-5 md:px-10 py-5">
-            {/* <div className="tooltip tooltip-right" data-tip="Buat percakapan baru"> */}
-              <button className="btn btn-ghost w-full text-lg justify-start">
-                <Icon name="edit_square"/>
+          <div className="h-full">
+            <div className="flex w-full bg-base-200 px-5 py-5 md:px-10">
+              {/* <div className="tooltip tooltip-right" data-tip="Buat percakapan baru"> */}
+              <button className="btn btn-ghost w-full justify-start text-lg">
+                <Icon name="edit_square" />
                 Percakapan baru
               </button>
-            {/* </div> */}
+              {/* </div> */}
+            </div>
+
+            <ul className="menu min-h-full w-80 bg-base-200 p-4 text-base-content">
+              {Array.from({ length: 10 }).map((_, i) => (
+                <li key={i}>
+                  <Link
+                    href={`${process.env.NEXT_PUBLIC_HOST}/chat/${i}`}
+                    className={
+                      props.activeChatId === i.toString() ? "active" : ""
+                    }
+                  >
+                    Item {i}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
-
-          <ul className="menu min-h-full w-80 bg-base-200 p-4 text-base-content">
-            {Array.from({ length: 10 }).map((_, i) => (
-              <li key={i}>
-                <Link
-                  href={`${process.env.NEXT_PUBLIC_HOST}/chat/${i}`}
-                  className={props.activeChatId === i.toString() ? "active" : ""}
-                >
-                  Item {i}
-                </Link>
-              </li>
-            ))}
-          </ul>
         </div>
-
       </div>
-      
-    </div></>
+    </>
   );
 };
 

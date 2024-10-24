@@ -8,11 +8,15 @@ type Props = {
 
 const ChatPromptInput: FC<Props> = (props) => {
   return (
-    <div className={"rounded-none relative z-10 join w-full px-2 md:px-72 lg:mx-auto pb-5 lg:pb-20 pt-3 shadow-[0px_-5px_40px_30px_rgba(var(--tw-bg-opacity),_100)] bg-base-100"}>
+    <div
+      className={
+        "join relative z-10 w-full rounded-none bg-base-100 px-2 pb-5 pt-3 shadow-[0px_-5px_40px_30px_rgba(var(--tw-bg-opacity),_100)] md:px-72 lg:mx-auto lg:pb-20"
+      }
+    >
       <input
         type="text"
         placeholder="Tanyakan sesuatu"
-        className="input join-item input-primary focus:outline-none flex-1 rounded-2xl"
+        className="input join-item input-primary flex-1 rounded-2xl focus:outline-none"
       />
       <button
         className="btn btn-primary join-item rounded-2xl"
