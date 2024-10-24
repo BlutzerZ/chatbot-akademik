@@ -1,8 +1,10 @@
 import Logo from "@/components/Logo";
+import ToggleTheme from "@/components/ToggleTheme";
 
 export default function LoginPage() {
   return (
     <div className="flex w-full flex-col items-center gap-8 p-4 pt-16">
+      <ToggleTheme />
       <Logo />
       <div className="card w-full md:w-2/3 lg:w-2/5">
         <form className="flex flex-col gap-4">

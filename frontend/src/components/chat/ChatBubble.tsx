@@ -11,20 +11,26 @@ const ChatMessageBubble: FC<Props> = (props) => {
     <div
       className={`chat ${
         props.position === "left" ? "chat-start" : "chat-end"
-      }`}
+      } md:mx-36 lg:mx-72`}
     >
       <div className="avatar chat-image">
         <div className="w-10 rounded-full">
           <img alt={props.sender} src={props.avatarUrl} />
         </div>
       </div>
-      <div className="chat-header">
-        {props.sender}
+      <div
+        className={`chat-header mb-1 ${props.position === "left" ? "ml-3" : "mr-3"}`}
+      >
+        <span className="mr-2 font-medium">{props.sender}</span>
         <time className="text-xs opacity-50">
           {props.createdAt?.toLocaleTimeString()}
         </time>
       </div>
-      <div className="chat-bubble">{props.content}</div>
+      <div
+        className={`chat-bubble ${props.sender === "Asisten" ? "chat-bubble-neutral" : "chat-bubble-primary"}`}
+      >
+        {props.content}
+      </div>
       <ChatMessageBubbleFooter
         rateable={props.rateable}
         onRate={props.onRate}

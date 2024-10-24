@@ -10,5 +10,5 @@ export default function useThemeChanger() {
     document.querySelector("html")!.setAttribute("data-theme", theme);
   }, [theme]);
 
-  return {theme, setTheme};
+  return { theme, setTheme };
 }
