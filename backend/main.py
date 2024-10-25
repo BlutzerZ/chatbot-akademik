@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.user.routes import router as UserRouter
 from app.conversation.routes import router as ConversationRouter
+from app.modelAI.routes import router as ModelRouter
 from app.modelAI import model
 
 database.Base.metadata.create_all(bind=database.engine)  
@@ -21,3 +22,4 @@ app.add_middleware(
 
 app.include_router(UserRouter)
 app.include_router(ConversationRouter)
+app.include_router(ModelRouter)

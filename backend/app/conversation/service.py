@@ -53,6 +53,7 @@ class ConversationService:
         except Exception as e:
             self.session.rollback()
             return e, []
+        
 
         # Generate AI response
         e, newAssistantMessage = self.generate_text_from_ai_model(message, newConversation)

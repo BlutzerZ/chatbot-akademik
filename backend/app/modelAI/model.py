@@ -1,8 +1,7 @@
 from uuid_extensions import uuid7
-import enum
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
-from sqlalchemy import Column, Enum, DateTime, Float, Integer, ForeignKey, String
+from sqlalchemy import Column, Enum, DateTime, Integer, ForeignKey, String
 from datetime import datetime
 from config.database import Base
 
@@ -14,5 +13,6 @@ class Model(Base):
     name = Column(String(), nullable=False)
     version = Column(String(), nullable=False)
     created_at = Column(DateTime, default=datetime.today())
-
-    AssistantMessage = relationship('AssistantMessage', backref='model')
+    
+    # Relasi one-to-many dengan AssistantMessage
+    assistant_messages = relationship('AssistantMessage', backref='model')
