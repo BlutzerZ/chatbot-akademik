@@ -18,7 +18,7 @@ class Conversation(Base):
     user_id = Column(UUID(as_uuid=True), ForeignKey('user.id'))
 
 
-class RoleEnum(enum.StrEnum):
+class RoleEnum(str, enum.Enum): # Ganti StrEnum dengan Enum
     assistant = "ASSISTANT"
     system = "SYSTEM"
     user = "USER"
@@ -37,7 +37,7 @@ class Message(Base):
     conversation_id = Column(UUID(as_uuid=True), ForeignKey('conversation.id'))
 
 
-class GenerationStatusEnum(enum.StrEnum):
+class GenerationStatusEnum(enum.Enum): # Ganti StrEnum dengan Enum
     pending = "PENDING"
     generating = "GENERATING"
     stopped = "STOPPED"
