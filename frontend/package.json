@@ -15,9 +15,19 @@
     "react-dom": "^18"
   },
   "devDependencies": {
+<<<<<<< Updated upstream
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+=======
+    "@tailwindcss/typography": "^0.5.15",
+    "@types/cookie": "^0.6.0",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "cookie": "^1.0.1",
+    "daisyui": "^4.12.13",
+>>>>>>> Stashed changes
     "eslint": "^8",
     "eslint-config-next": "14.2.15",
     "postcss": "^8",
