@@ -1,7 +1,6 @@
 import { FC } from "react";
 import { ChatMessage, ChatMessageRating } from "./types";
 import ChatMessageBubble from "./ChatBubble";
-import ChatPrompt from "./ChatPrompt";
 
 type Props = {
   className?: string;
@@ -11,8 +10,8 @@ type Props = {
 
 const Chat: FC<Props> = (props) => {
   return (
-    <div className={"flex flex-col " + (props.className || "")}>
-      <div className="flex-1 overflow-x-auto">
+    <div className={"flex flex-col content-center " + (props.className || "")}>
+      <div className="flex-1 px-5 pb-20 pt-5">
         {props.messages.map((message) => (
           <ChatMessageBubble
             key={message.id}
@@ -21,7 +20,6 @@ const Chat: FC<Props> = (props) => {
           />
         ))}
       </div>
-      <ChatPrompt />
     </div>
   );
 };
