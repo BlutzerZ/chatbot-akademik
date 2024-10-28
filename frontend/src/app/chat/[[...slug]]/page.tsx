@@ -4,9 +4,9 @@ import { ChatMessage, ChatMessageRating } from "@/components/chat/types";
 import React from "react";
 import ChatLayout from "./ChatLayout";
 import { useParams } from "next/navigation";
-import Logo from "@/components/Logo";
 import ChatHeader from "@/components/chat/ChatHeader";
 import ChatPromptInput from "@/components/chat/ChatPromptInput";
+import NewChat from "@/components/chat/NewChat";
 
 type PageParams = {
   slug: string[];
@@ -101,7 +101,7 @@ export default function ChatPage() {
   const [messages, setMessages] = React.useState<ChatMessage[]>(MESSAGES);
   const params = useParams<PageParams>();
   const chatId = params.slug[0];
-  console.log(chatId);
+  // console.log(chatId);
 
   const handleMessageRate = (messageId: string, rating: ChatMessageRating) => {
     setMessages((messages) =>
@@ -114,12 +114,18 @@ export default function ChatPage() {
   return (
     <ChatLayout activeChatId={chatId} className="flex h-screen flex-col gap-2">
       <ChatHeader />
-      <Chat
-        messages={messages}
-        onRate={handleMessageRate}
-        className="flex-1 overflow-y-auto"
-      />
-      <ChatPromptInput className="join relative z-10 w-full rounded-none bg-base-100 px-2 pb-5 pt-3 md:px-72 lg:mx-auto lg:pb-14" />
+      {chatId === "new" ? (
+        <NewChat />
+      ) : (
+        <>
+          <Chat
+            messages={messages}
+            onRate={handleMessageRate}
+            className="flex-1 overflow-y-auto"
+          />
+          <ChatPromptInput className="relative z-10 w-full rounded-none bg-base-100 px-2 pb-5 pt-3 md:px-72 lg:mx-auto lg:pb-14" />
+        </>
+      )}
     </ChatLayout>
   );
 }
