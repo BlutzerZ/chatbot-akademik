@@ -8,7 +8,7 @@ type Props = {
 
 const ChatPromptInput: FC<Props> = (props) => {
   return (
-    <div className={props.className}>
+    <div className={`+ join ${props.className}`}>
       <input
         type="text"
         placeholder="Tanyakan sesuatu"

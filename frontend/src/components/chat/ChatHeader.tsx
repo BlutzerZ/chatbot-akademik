@@ -24,7 +24,7 @@ export default function ChatHeader() {
           <ToggleTheme />
         </NoSsr>
         <div className="dropdown dropdown-end">
-          <div tabIndex={0} role="button" className="m-1">
+          <div tabIndex={0} role="button" className="btn btn-ghost m-1 p-2">
             <Icon name="account_circle" />
           </div>
           <ul

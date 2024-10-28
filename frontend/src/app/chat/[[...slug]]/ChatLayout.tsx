@@ -25,10 +25,10 @@ const ChatLayout: FC<Props> = ({ className = "", ...props }) => {
             className="drawer-overlay"
           ></label>
 
-          <div className="flex h-full flex-col">
-            <div className="flex w-full px-5 pb-4 pt-6 md:bg-base-200 md:px-10 md:pb-1 md:pt-3">
+          <div className="flex h-full flex-col bg-base-100 md:bg-base-200">
+            <div className="flex w-full px-5 pb-4 pt-6 md:px-10 md:pb-1 md:pt-3">
               <Link
-                href={"/"}
+                href={"/chat/new"}
                 className="btn btn-ghost w-full justify-start text-lg"
               >
                 <Icon name="edit_square" />
@@ -38,17 +38,15 @@ const ChatLayout: FC<Props> = ({ className = "", ...props }) => {
 
             <div className="menu block h-full w-80 space-y-2 overflow-y-auto p-4 text-base-content md:bg-base-200">
               {Array.from({ length: 50 }).map((_, i) => (
-                <button
+                <Link
                   key={i}
-                  className="w-full rounded-md px-6 py-3 text-start hover:bg-base-200"
+                  href={`${process.env.NEXT_PUBLIC_HOST}/chat/${i}`}
+                  className={` ${props.activeChatId === i.toString() ? "active font-bold" : ""}`}
                 >
-                  <Link
-                    href={`${process.env.NEXT_PUBLIC_HOST}/chat/${i}`}
-                    className={` ${props.activeChatId === i.toString() ? "active font-bold" : ""}`}
-                  >
+                  <button className="w-full rounded-md px-6 py-3 text-start hover:bg-base-200 md:hover:bg-base-100">
                     Item {i}
-                  </Link>
-                </button>
+                  </button>
+                </Link>
               ))}
             </div>
 
