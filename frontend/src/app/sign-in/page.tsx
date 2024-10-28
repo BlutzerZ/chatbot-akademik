@@ -1,11 +1,12 @@
 "use client";
 
+import client from "@/api/backend-client";
 import Logo from "@/components/Logo";
 import NoSsr from "@/components/NoSsr";
 import ToggleTheme from "@/components/ToggleTheme";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { FormEventHandler, useState } from "react";
 
 export default function SignInPage() {
   const [username, setUsername] = useState("");
@@ -14,38 +15,31 @@ export default function SignInPage() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleSubmit = async (event: any) => {
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
     setLoading(true);
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/sign-in`,
-        {
-          method: "POST",
-          headers: {
-            "content-type": "application/json",
-          },
-          body: JSON.stringify({
-            username,
-            password,
-          }),
+      const result = await client.POST("/auth/sign-in", {
+        body: {
+          username,
+          password,
         },
-      );
+      });
 
       setLoading(false);
 
-      if (response.ok) {
-        const res = await response.json();
+      if (!result.error) {
+        const res = result.data;
         const token = res.data.token;
         localStorage.setItem("token", token);
 
         router.push("/chat/0");
       } else {
-        const errorData = await response.json();
-        setError(errorData.error || "Login failed");
+        // TODO: Change this later
+        setError(JSON.stringify(result.error));
       }
-    } catch (error) {
+    } catch {
       setLoading(false);
       setError("Error");
     }
