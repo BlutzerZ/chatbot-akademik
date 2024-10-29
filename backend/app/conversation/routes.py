@@ -44,7 +44,7 @@ async def create_conversation(
 
 
 
-@router.get("/conversations/{convesation_id}", dependencies=[Depends(middleware.JWTBearer())], response_model=response.GetConversationByIDResponse, tags=["Conversation"])
+@router.get("/conversations/{conversation_id}", dependencies=[Depends(middleware.JWTBearer())], response_model=response.GetConversationByIDResponse, tags=["Conversation"])
 async def get_conversation_by_id(
         request: Request,
         conversation_id : UUID,
@@ -62,7 +62,7 @@ async def get_conversation_by_id(
 
 
 
-@router.get("/conversations/{convesation_id}/messages", dependencies=[Depends(middleware.JWTBearer())], response_model=response.GetConversationByIDWithMessageResponse, tags=["Conversation"])
+@router.get("/conversations/{conversation_id}/messages", dependencies=[Depends(middleware.JWTBearer())], response_model=response.GetConversationByIDWithMessageResponse, tags=["Conversation"])
 async def get_conversation_by_id_with_message(
         request: Request,
         conversation_id : UUID,
@@ -80,7 +80,7 @@ async def get_conversation_by_id_with_message(
 
 
 
-@router.post("/conversations/{convesation_id}/messages", dependencies=[Depends(middleware.JWTBearer())], response_model=response.CreateConversationOrMessageResponse, tags=["Conversation"])
+@router.post("/conversations/{conversation_id}/messages", dependencies=[Depends(middleware.JWTBearer())], response_model=response.CreateConversationOrMessageResponse, tags=["Conversation"])
 async def create_message_by_coverstaion_id(
         request: Request,
         conversation_id : UUID,
@@ -98,7 +98,7 @@ async def create_message_by_coverstaion_id(
 
 
 
-@router.get("/conversations/{convesation_id}/messages/{message_id}", dependencies=[Depends(middleware.JWTBearer())], response_model=response.GetMessageByIDResponse, tags=["Conversation"])
+@router.get("/conversations/{conversation_id}/messages/{message_id}", dependencies=[Depends(middleware.JWTBearer())], response_model=response.GetMessageByIDResponse, tags=["Conversation"])
 async def get_message_with_convetsation_id_and_message_id(
         request: Request,
         conversation_id : UUID,
