@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { ChatMessage, ChatMessageRating } from "./types";
-import ChatMessageBubble from "./ChatBubble";
+import ChatMessageBubble from "./ChatMessageBubble";
 
 type Props = {
   className?: string;
