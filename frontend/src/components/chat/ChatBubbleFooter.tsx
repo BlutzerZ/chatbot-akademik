@@ -16,7 +16,7 @@ type Props = {
 
 const ChatMessageBubbleFooter: FC<Props> = (props) => {
   const isRated = props.rating !== undefined;
-  const isReported = props.report !== undefined
+  const isReported = props.report !== undefined;
   const isThumbsUp = isRated && props.rating === 1;
   const isThumbsDown = isRated && props.rating === -1;
 
@@ -56,7 +56,7 @@ const ChatMessageBubbleFooter: FC<Props> = (props) => {
         </div>
       )}
       {props.reportable && (
-        <ReportModalPortal reported={isReported} id={props.id}/>
+        <ReportModalPortal reported={isReported} id={props.id} />
       )}
     </div>
   );

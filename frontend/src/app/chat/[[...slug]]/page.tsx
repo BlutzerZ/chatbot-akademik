@@ -118,25 +118,28 @@ export default function ChatPage() {
 
   return (
     <>
-    <Head>
-      <title>bngky.</title>
-    </Head>
-    <ChatLayout activeChatId={chatId} className="flex h-screen flex-col gap-2">
-      <div id="modal-root"></div>
-      <ChatHeader />
-      {chatId === "new" ? (
-        <NewChat />
-      ) : (
-        <>
-          <Chat
-            messages={messages}
-            onRate={handleMessageRate}
-            className="flex-1 overflow-y-auto"
-          />
-          <ChatPromptInput className="relative z-10 w-full rounded-none bg-base-100 px-2 pb-5 pt-3 md:px-72 lg:mx-auto lg:pb-14" />
-        </>
-      )}
-    </ChatLayout>
+      <Head>
+        <title>bngky.</title>
+      </Head>
+      <ChatLayout
+        activeChatId={chatId}
+        className="flex h-screen flex-col gap-2"
+      >
+        <div id="modal-root"></div>
+        <ChatHeader />
+        {chatId === "new" ? (
+          <NewChat />
+        ) : (
+          <>
+            <Chat
+              messages={messages}
+              onRate={handleMessageRate}
+              className="flex-1 overflow-y-auto"
+            />
+            <ChatPromptInput className="relative z-10 w-full rounded-none bg-base-100 px-2 pb-5 pt-3 md:px-72 lg:mx-auto lg:pb-14" />
+          </>
+        )}
+      </ChatLayout>
     </>
   );
 }

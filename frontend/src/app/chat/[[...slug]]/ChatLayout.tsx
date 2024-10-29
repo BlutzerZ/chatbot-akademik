@@ -43,7 +43,9 @@ const ChatLayout: FC<Props> = ({ className = "", ...props }) => {
                   href={`${process.env.NEXT_PUBLIC_HOST}/chat/${i}`}
                   className={` ${props.activeChatId === i.toString() ? "active font-bold" : ""}`}
                 >
-                  <button className={`w-full rounded-md px-6 py-4 text-start hover:bg-base-200 md:hover:bg-base-100 ${props.activeChatId === i.toString() ? "bg-base-200 md:bg-base-300" : ""}`}>
+                  <button
+                    className={`w-full rounded-md px-6 py-4 text-start hover:bg-base-200 md:hover:bg-base-100 ${props.activeChatId === i.toString() ? "bg-base-200 md:bg-base-300" : ""}`}
+                  >
                     Item {i}
                   </button>
                 </Link>
