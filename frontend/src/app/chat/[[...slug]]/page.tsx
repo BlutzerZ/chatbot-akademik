@@ -7,6 +7,7 @@ import { useParams } from "next/navigation";
 import ChatHeader from "@/components/chat/ChatHeader";
 import ChatPromptInput from "@/components/chat/ChatPromptInput";
 import NewChat from "@/components/chat/NewChat";
+import Head from "next/head";
 
 type PageParams = {
   slug: string[];
@@ -23,6 +24,7 @@ const MESSAGES: ChatMessage[] = [
     position: "left",
     rateable: true,
     regeneratable: true,
+    reportable: true,
   },
   {
     id: "0192b4d8-d7a3-7ba9-ac30-4580109e3a7g",
@@ -43,6 +45,7 @@ const MESSAGES: ChatMessage[] = [
     position: "left",
     rateable: true,
     regeneratable: true,
+    reportable: true,
   },
   {
     id: "0192b4d8-d7a3-7ba9-ac30-4580109e3a7f",
@@ -64,6 +67,7 @@ const MESSAGES: ChatMessage[] = [
     position: "left",
     rateable: true,
     regeneratable: true,
+    reportable: true,
   },
   {
     id: "0192b4d8-516b-74c2-8455-2c2f05c4dd43",
@@ -85,6 +89,7 @@ const MESSAGES: ChatMessage[] = [
     position: "left",
     rateable: true,
     regeneratable: true,
+    reportable: true,
   },
   {
     id: "0192b4d8-516b-74c2-8455-2c2f05c4dd33",
@@ -112,7 +117,12 @@ export default function ChatPage() {
   };
 
   return (
+    <>
+    <Head>
+      <title>bngky.</title>
+    </Head>
     <ChatLayout activeChatId={chatId} className="flex h-screen flex-col gap-2">
+      <div id="modal-root"></div>
       <ChatHeader />
       {chatId === "new" ? (
         <NewChat />
@@ -127,5 +137,6 @@ export default function ChatPage() {
         </>
       )}
     </ChatLayout>
+    </>
   );
 }

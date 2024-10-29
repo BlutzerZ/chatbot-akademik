@@ -32,10 +32,12 @@ const ChatMessageBubble: FC<Props> = (props) => {
         {props.content}
       </div>
       <ChatMessageBubbleFooter
+        id={props.id}
         rateable={props.rateable}
         onRate={props.onRate}
         rating={props.rating}
         regeneratable={props.regeneratable}
+        reportable={props.reportable}
       />
     </div>
   );
