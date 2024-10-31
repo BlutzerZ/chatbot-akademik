@@ -20,49 +20,73 @@ from middleware.jwt import JWTBearer
 
 router = APIRouter()
 
+
 # GET /models
-@router.get("/models", dependencies=[Depends(JWTBearer())], response_model=response.GetAllModelResponse, tags=["ModelAI"])
+@router.get(
+    "/models",
+    dependencies=[Depends(JWTBearer())],
+    response_model=response.GetAllModelResponse,
+    tags=["ModelAI"],
+)
 async def get_all_models(
-    request: Request,
-    limit: int,
-    session: Session = Depends(get_db)
+    request: Request, limit: int, session: Session = Depends(get_db)
 ):
     _service = service.ModelAIService(session)
     models = _service.get_all_models(limit=limit)
-    
+
     if not models:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No models found.")
-    
-    return response.GetAllModelResponse(code=status.HTTP_200_OK, message="Models fetched successfully", data=models)
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="No models found."
+        )
+
+    return response.GetAllModelResponse(
+        code=status.HTTP_200_OK, message="Models fetched successfully", data=models
+    )
 
 
 # POST /model
-@router.post("/model", dependencies=[Depends(JWTBearer())], response_model=response.GetModelResponse, tags=["ModelAI"])
+@router.post(
+    "/model",
+    dependencies=[Depends(JWTBearer())],
+    response_model=response.GetModelResponse,
+    tags=["ModelAI"],
+)
 async def create_model(
     request: Request,
     model_request: request.CreateModelRequest,
-    session: Session = Depends(get_db)
+    session: Session = Depends(get_db),
 ):
     _service = service.ModelAIService(session)
     e, new_model = _service.create_model(model_request)
-    
+
     if e != None:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=e)
-    
-    return response.GetModelResponse(code=status.HTTP_201_CREATED, message="Model created successfully", data=new_model)
+
+    return response.GetModelResponse(
+        code=status.HTTP_201_CREATED,
+        message="Model created successfully",
+        data=new_model,
+    )
 
 
 # GET /model/{model_id}
-@router.get("/model/{model_id}", dependencies=[Depends(JWTBearer())], response_model=response.GetModelResponse, tags=["ModelAI"])
+@router.get(
+    "/model/{model_id}",
+    dependencies=[Depends(JWTBearer())],
+    response_model=response.GetModelResponse,
+    tags=["ModelAI"],
+)
 async def get_model_by_id(
-    request: Request,
-    model_id: UUID,
-    session: Session = Depends(get_db)
+    request: Request, model_id: UUID, session: Session = Depends(get_db)
 ):
     _service = service.ModelAIService(session)
     model_data = _service.get_model_by_id(model_id)
-    
+
     if not model_data:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Model not found.")
-    
-    return response.GetModelResponse(code=status.HTTP_200_OK, message="Model fetched successfully", data=model_data)
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Model not found."
+        )
+
+    return response.GetModelResponse(
+        code=status.HTTP_200_OK, message="Model fetched successfully", data=model_data
+    )

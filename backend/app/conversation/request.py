@@ -1,6 +1,6 @@
 from datetime import datetime
 from enum import Enum
-from pydantic import BaseModel 
+from pydantic import BaseModel
 from sqlalchemy.dialects.postgresql import UUID
 
 
@@ -8,6 +8,7 @@ class RoleEnum(str, Enum):
     assistant = "ASSISTANT"
     system = "SYSTEM"
     user = "USER"
+
 
 class GenerationStatusEnum(str, Enum):
     pending = "PENDING"
@@ -36,7 +37,6 @@ class MessageDetail(BaseModel):
 
     class Config:
         arbitrary_types_allowed = True
-
 
 
 class ConversationDetail(BaseModel):

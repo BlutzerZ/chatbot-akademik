@@ -2,6 +2,7 @@ from datetime import date, datetime
 from pydantic import BaseModel
 from uuid import UUID
 
+
 class ModelDetail(BaseModel):
     id: UUID
     name: str
@@ -10,6 +11,7 @@ class ModelDetail(BaseModel):
 
     class Config:
         from_attributes = True
+
 
 class GetAllModelResponse(BaseModel):
     code: int
