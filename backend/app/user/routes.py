@@ -1,15 +1,61 @@
 from typing import Annotated, Union
 
-from fastapi.security import HTTPBearer
+from fastapi.responses import RedirectResponse
+from fastapi.security import HTTPBearer, OAuth2PasswordBearer
 from app.user.service import UserService
 from middleware.jwt import JWTBearer
 from config.database import get_db
 from app.user import model, request, response
 from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
-import middleware
+import requests, os
+from urllib.parse import urlencode, parse_qs, urlparse
 
 router = APIRouter()
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+# Replace these with your own values from the Google Developer Console
+@router.get("/auth/sing-in/google", tags=["User"])
+async def login_google(callback_url: str):
+    state = urlencode({"callback_url": callback_url})
+    print(state)
+    return {
+        "url": 
+            f"https://accounts.google.com/o/oauth2/auth"
+            f"?response_type=code&client_id={os.getenv('GOOGLE_CLIENT_ID')}"
+            f"&redirect_uri={os.getenv('GOOGLE_REDIRECT_URI')}"
+            f"&scope=openid%20profile%20email&access_type=offline&state={state}"
+    }
+
+@router.get("/auth/sign-in/google/callback/", tags=["Callback"])
+async def auth_google(request: Request, code : str, state: str):
+    parsedState = parse_qs(state)
+    callbackUrl = parsedState.get("callback_url", [None])[0]
+    # callback_url = "https:/google.com"
+
+    response = requests.post(
+        url="https://accounts.google.com/o/oauth2/token", 
+        data={
+            "code": code,
+            "client_id": os.getenv("GOOGLE_CLIENT_ID"),
+            "client_secret": os.getenv("GOOGLE_CLIENT_SECRET"),
+            "redirect_uri": os.getenv("GOOGLE_REDIRECT_URI"),
+            "grant_type": "authorization_code",
+        },
+    )
+    if response.status_code != 200:
+        return RedirectResponse(url=f"{callbackUrl}?error=access_denied")
+
+    accessToken = response.json().get("access_token")
+    userInfo = requests.get(
+        url="https://www.googleapis.com/oauth2/v1/userinfo", 
+        headers={"Authorization": f"Bearer {accessToken}"},
+    )
+    if userInfo.status_code != 200:
+        return RedirectResponse(url=f"{callbackUrl}?error=failed_to_retrieve_user")
+
+    return RedirectResponse(url=f"{callbackUrl}?access_token={accessToken}")
+
 
 @router.post("/auth/sign-in", response_model=response.UserAuthResponse, tags=["User"])
 async def user_authentication(
