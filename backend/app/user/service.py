@@ -1,4 +1,3 @@
-
 from fastapi import HTTPException
 import requests
 from app.user.model import *
@@ -11,10 +10,11 @@ from helper import jwt
 pwo = PasswordGenerator()
 pwo.minlen = 16
 
+
 class UserService:
     def __init__(self, session: Session):
         self.session = session
-    
+
     def get_token_by_username(self, username):
         user = self.session.query(User).filter(User.username == username).first()
         if not user:
@@ -44,10 +44,13 @@ class UserService:
         if data.username == data.password:
             testingLogin = True
 
-        r = requests.post("https://api.dinus.ac.id/api/v1/siadin/login", json={
-            "username": data.username,
-            "password": data.password,
-        })
+        r = requests.post(
+            "https://api.dinus.ac.id/api/v1/siadin/login",
+            json={
+                "username": data.username,
+                "password": data.password,
+            },
+        )
 
         if r.status_code == 200 or testingLogin == True:
             e, token = self.get_token_by_username(data.username)
@@ -59,7 +62,7 @@ class UserService:
                 message=f"Authentication Valid" ,
                 data={"token": token}
             )
-        
+
         else:
             raise HTTPException(status_code=401, detail="unathorize")
 
@@ -68,12 +71,10 @@ class UserService:
             token = jwt.generate_token(jwtData)
         except Exception as e:
             return e, None
-        
+
         print(token)
         return None, token
 
-
-
     def get_user_detail(self, jwtData) -> User:
-        user = self.session.query(User).filter_by(id=jwtData['id']).first()
+        user = self.session.query(User).filter_by(id=jwtData["id"]).first()
         return user

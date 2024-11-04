@@ -28,6 +28,7 @@ class UserDetail(BaseModel):
         arbitrary_types_allowed = True      
 
 
+
 class UserDetailResponse(BaseModel):
     code: int
     message: str

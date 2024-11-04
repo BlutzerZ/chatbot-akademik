@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 from app.modelAI import model, request, response
 from uuid import UUID
 
+
 class ModelAIService:
     def __init__(self, session: Session):
         self.session = session
@@ -9,17 +10,23 @@ class ModelAIService:
     def get_all_models(self, limit: int = 10) -> list[response.ModelDetail]:
         try:
             # Mengambil semua model dengan batas limit
-            models = self.session.query(model.Model).order_by(model.Model.created_at.desc()).limit(limit).all()
+            models = (
+                self.session.query(model.Model)
+                .order_by(model.Model.created_at.desc())
+                .limit(limit)
+                .all()
+            )
             return models
         except Exception as e:
             self.session.rollback()
             return []
 
-    def create_model(self, model_request: request.CreateModelRequest) -> tuple[Exception, response.ModelDetail]:
+    def create_model(
+        self, model_request: request.CreateModelRequest
+    ) -> tuple[Exception, response.ModelDetail]:
         try:
             new_model = model.Model(
-                name=model_request.name,
-                version=model_request.version
+                name=model_request.name, version=model_request.version
             )
             self.session.add(new_model)
             self.session.commit()

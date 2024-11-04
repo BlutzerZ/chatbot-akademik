@@ -32,4 +32,4 @@ jobs:
       # Run Black on the ./backend directory
       - name: Run Black
         run: |
-          black ./backend
+          black --check ./backend

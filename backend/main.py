@@ -7,13 +7,13 @@ from app.conversation.routes import router as ConversationRouter
 from app.modelAI.routes import router as ModelRouter
 from app.modelAI import model
 
-database.Base.metadata.create_all(bind=database.engine)  
+database.Base.metadata.create_all(bind=database.engine)
 app = FastAPI()
 
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], 
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

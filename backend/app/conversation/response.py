@@ -1,7 +1,7 @@
 from datetime import datetime
 from enum import Enum
 from typing import Union
-from pydantic import BaseModel 
+from pydantic import BaseModel
 from uuid import UUID
 
 
@@ -21,7 +21,6 @@ class ConversationDetail(BaseModel):
         arbitrary_types_allowed = True
 
 
-
 class MessageDetail(BaseModel):
     id: UUID
     role: RoleEnum
@@ -35,7 +34,6 @@ class MessageDetail(BaseModel):
         arbitrary_types_allowed = True
 
 
-
 class GetAllConversationResponse(BaseModel):
     code: int
     message: str
@@ -47,6 +45,7 @@ class CreateConversationOrMessageResponse(BaseModel):
     message: str
     data: list[MessageDetail]
 
+
 class ConversationDetailWithMessage(BaseModel):
     id: UUID
     messages: list[MessageDetail]
@@ -57,10 +56,12 @@ class ConversationDetailWithMessage(BaseModel):
         from_attributes = True
         arbitrary_types_allowed = True
 
+
 class GetConversationByIDResponse(BaseModel):
     code: int
     message: str
     data: ConversationDetail
+
 
 class GetConversationByIDWithMessageResponse(BaseModel):
     code: int

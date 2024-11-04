@@ -1,13 +1,13 @@
 from datetime import date
-from pydantic import BaseModel # type: ignore
+from pydantic import BaseModel  # type: ignore
 
 
 class UserAuthRequest(BaseModel):
     username: str
     password: str
-    
+
     class Config:
-        from_attributes = True 
+        from_attributes = True
 
 
 class RefreshTokenRequest(BaseModel):
