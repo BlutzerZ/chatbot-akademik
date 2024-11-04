@@ -56,7 +56,7 @@ async def auth_google(request: Request, code : str, state: str, session: Session
     _service = UserService(session)
     e, token = _service.get_token_by_username(userInfo.json().get('email'))
     
-    if e != None:
+    if e:
         return RedirectResponse(url=f"{callbackUrl}?access_token=invalid")
 
     return RedirectResponse(url=f"{callbackUrl}?access_token={token}")
