@@ -28,12 +28,11 @@ async def login_google(callback_url: str):
     }
 
 @router.get("/auth/sign-in/google/callback/", tags=["Callback"])
-async def auth_google(request: Request, code : str, state: str):
+async def auth_google(request: Request, code : str, state: str, session: Session = Depends(get_db)):
     parsedState = parse_qs(state)
     callbackUrl = parsedState.get("callback_url", [None])[0]
-    # callback_url = "https:/google.com"
 
-    response = requests.post(
+    _response = requests.post(
         url="https://accounts.google.com/o/oauth2/token", 
         data={
             "code": code,
@@ -43,18 +42,24 @@ async def auth_google(request: Request, code : str, state: str):
             "grant_type": "authorization_code",
         },
     )
-    if response.status_code != 200:
+    if _response.status_code != 200:
         return RedirectResponse(url=f"{callbackUrl}?error=access_denied")
 
-    accessToken = response.json().get("access_token")
+    accessToken = _response.json().get("access_token")
     userInfo = requests.get(
         url="https://www.googleapis.com/oauth2/v1/userinfo", 
         headers={"Authorization": f"Bearer {accessToken}"},
     )
     if userInfo.status_code != 200:
         return RedirectResponse(url=f"{callbackUrl}?error=failed_to_retrieve_user")
+    
+    _service = UserService(session)
+    e, token = _service.get_token_by_username(userInfo.json().get('email'))
+    
+    if e != None:
+        return RedirectResponse(url=f"{callbackUrl}?access_token=invalid")
 
-    return RedirectResponse(url=f"{callbackUrl}?access_token={accessToken}")
+    return RedirectResponse(url=f"{callbackUrl}?access_token={token}")
 
 
 @router.post("/auth/sign-in", response_model=response.UserAuthResponse, tags=["User"])

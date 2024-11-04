@@ -15,6 +15,30 @@ class UserService:
     def __init__(self, session: Session):
         self.session = session
     
+    def get_token_by_username(self, username):
+        user = self.session.query(User).filter(User.username == username).first()
+        if not user:
+            try:
+                user = model.User(
+                    username=username,
+                    token=pwo.generate()
+                )
+                self.session.add(user)
+                self.session.commit()
+                self.session.refresh(user)
+
+
+            except Exception as e:
+                self.session.rollback()
+                return e, None
+
+        token = jwt.generate_token({
+            "id": user.id,
+            "username": user.username
+        })
+        return None, token
+
+
     def auth(self, data:request.UserAuthRequest) -> response.UserAuthResponse:        
         # testing mode
         if data.username == data.password:
@@ -26,31 +50,13 @@ class UserService:
         })
 
         if r.status_code == 200 or testingLogin == True:
-            userMessage = ""
-            user = self.session.query(User).filter(User.username == data.username).first()
-            if not user:
-                try:
-                    user = model.User(
-                        username=data.username,
-                        token=pwo.generate()
-                    )
-                    self.session.add(user)
-                    self.session.commit()
-                    self.session.refresh(user)
-                    userMessage = "created user |"
-                except:
-                    self.session.rollback()
-                    raise
-                
-            token = jwt.generate_token({
-                "id": user.id,
-                "username": user.username
-            })
-
+            e, token = self.get_token_by_username(data.username)
+            if e:
+                raise
 
             return response.UserAuthResponse(
                 code=200,
-                message=f"{userMessage} Authentication Valid" ,
+                message=f"Authentication Valid" ,
                 data={"token": token}
             )
         
