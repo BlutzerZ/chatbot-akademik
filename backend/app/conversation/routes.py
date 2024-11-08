@@ -124,7 +124,7 @@ async def get_conversation_by_id(
 
 
 @router.get(
-    "/conversations/{conversation_id}/messages",
+    "/conversations/{conversation_id}/inquire",
     dependencies=[Depends(middleware.JWTBearer())],
     response_model=response.GetConversationByIDWithMessageResponse,
     tags=["Conversation"],
@@ -162,7 +162,7 @@ async def get_conversation_by_id_with_message(
 
 
 @router.post(
-    "/conversations/{conversation_id}/messages",
+    "/conversations/{conversation_id}/inquire",
     dependencies=[Depends(middleware.JWTBearer())],
     response_model=response.CreateConversationOrMessageResponse,
     tags=["Conversation"],
