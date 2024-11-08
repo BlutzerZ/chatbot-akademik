@@ -1,6 +1,7 @@
 from typing import Annotated, Union
 
 from fastapi.security import HTTPBearer
+from exceptions.custom_exceptions import CustomHTTPException
 from config.database import get_db
 from app.conversation import model, request, response, service
 from fastapi import APIRouter, Depends, Request, HTTPException
@@ -22,10 +23,26 @@ async def get_all_conversation(
 ):
 
     _service = service.ConversationService(session)
-    conversations = _service.get_all_conversations(
+    e, conversations = _service.get_all_conversations(
         jwtData=request.state.jwtData,
         limit=limit,
     )
+
+    if e:
+        raise CustomHTTPException(
+            type_="/internal-server-error",
+            title="Internal Server Error at Service",
+            status=500,
+            detail=str(e)
+        )
+    
+    if not conversations:
+        raise CustomHTTPException(
+            type_="/not-found",
+            title="Not Found",
+            status=404,
+            detail="Data not found or empty"
+        )
 
     return response.GetAllConversationResponse(
         code=200, message="Loh valid", data=conversations
@@ -47,8 +64,21 @@ async def create_conversation(
     _service = service.ConversationService(session)
     e, messages = _service.create_conversation(request.state.jwtData, data.message)
 
-    if e != None:
-        raise HTTPException(status_code=501, detail=str(e))
+    if e:
+        raise CustomHTTPException(
+            type_="/internal-server-error",
+            title="Internal Server Error at Service",
+            status=500,
+            detail=str(e)
+        )
+    
+    if not messages:
+        raise CustomHTTPException(
+            type_="/not-found",
+            title="Not Found",
+            status=404,
+            detail="Data not found or empty"
+        )
 
     return response.CreateConversationOrMessageResponse(
         code=200, message="Showing all message", data=messages
@@ -72,9 +102,22 @@ async def get_conversation_by_id(
         request.state.jwtData, conversation_id
     )
 
-    if e != None:
-        raise HTTPException(status_code=501, detail=str(e))
-
+    if e:
+        raise CustomHTTPException(
+            type_="/internal-server-error",
+            title="Internal Server Error at Service",
+            status=500,
+            detail=str(e)
+        )
+    
+    if not conversation:
+        raise CustomHTTPException(
+            type_="/not-found",
+            title="Not Found",
+            status=404,
+            detail="Data not found or empty"
+        )
+    
     return response.GetConversationByIDResponse(
         code=200, message="Loh valid", data=conversation
     )
@@ -97,9 +140,22 @@ async def get_conversation_by_id_with_message(
         request.state.jwtData, conversation_id
     )
 
-    if e != None:
-        raise HTTPException(status_code=501, detail=str(e))
-
+    if e:
+        raise CustomHTTPException(
+            type_="/internal-server-error",
+            title="Internal Server Error at Service",
+            status=500,
+            detail=str(e)
+        )
+    
+    if not conversation:
+        raise CustomHTTPException(
+            type_="/not-found",
+            title="Not Found",
+            status=404,
+            detail="Data not found or empty"
+        )
+    
     return response.GetConversationByIDWithMessageResponse(
         code=200, message="Loh valid", data=conversation.messages
     )
@@ -123,8 +179,21 @@ async def create_message_by_coverstaion_id(
         request.state.jwtData, data.message, conversation_id
     )
 
-    if e != None:
-        raise HTTPException(status_code=501, detail=str(e))
+    if e:
+        raise CustomHTTPException(
+            type_="/internal-server-error",
+            title="Internal Server Error at Service",
+            status=500,
+            detail=str(e)
+        )
+    
+    if not message:
+        raise CustomHTTPException(
+            type_="/not-found",
+            title="Not Found",
+            status=404,
+            detail="Data not found or empty"
+        )
 
     return response.CreateConversationOrMessageResponse(
         code=200, message="Loh valid", data=message
@@ -149,8 +218,21 @@ async def get_message_with_convetsation_id_and_message_id(
         request.state.jwtData, message_id, conversation_id
     )
 
-    if e != None:
-        raise HTTPException(status_code=501, detail=str(e))
+    if e:
+        raise CustomHTTPException(
+            type_="/internal-server-error",
+            title="Internal Server Error at Service",
+            status=500,
+            detail=str(e)
+        )
+    
+    if not message:
+        raise CustomHTTPException(
+            type_="/not-found",
+            title="Not Found",
+            status=404,
+            detail="Data not found or empty"
+        )
 
     return response.GetMessageByIDResponse(code=200, message="Loh valid", data=message)
 

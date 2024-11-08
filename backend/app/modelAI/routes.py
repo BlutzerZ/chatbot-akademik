@@ -15,6 +15,7 @@ from sqlalchemy.orm import Session
 from uuid import UUID
 
 from app.modelAI import model, request, response, service
+from exceptions.custom_exceptions import CustomHTTPException
 from config.database import get_db
 from middleware.jwt import JWTBearer
 
@@ -32,11 +33,22 @@ async def get_all_models(
     request: Request, limit: int, session: Session = Depends(get_db)
 ):
     _service = service.ModelAIService(session)
-    models = _service.get_all_models(limit=limit)
+    e, models = _service.get_all_models(limit=limit)
 
+    if e:
+        raise CustomHTTPException(
+            type_="/internal-server-error",
+            title="Internal Server Error at Service",
+            status=500,
+            detail=str(e)
+        )
+    
     if not models:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="No models found."
+        raise CustomHTTPException(
+            type_="/not-found",
+            title="Not Found",
+            status=404,
+            detail="Data not found or empty"
         )
 
     return response.GetAllModelResponse(
@@ -59,9 +71,21 @@ async def create_model(
     _service = service.ModelAIService(session)
     e, new_model = _service.create_model(model_request)
 
-    if e != None:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=e)
-
+    if e:
+        raise CustomHTTPException(
+            type_="/internal-server-error",
+            title="Internal Server Error at Service",
+            status=500,
+            detail=str(e)
+        )
+    
+    if not new_model:
+        raise CustomHTTPException(
+            type_="/not-found",
+            title="Not Found",
+            status=404,
+            detail="Data not found or empty"
+        )
     return response.GetModelResponse(
         code=status.HTTP_201_CREATED,
         message="Model created successfully",
@@ -80,11 +104,22 @@ async def get_model_by_id(
     request: Request, model_id: UUID, session: Session = Depends(get_db)
 ):
     _service = service.ModelAIService(session)
-    model_data = _service.get_model_by_id(model_id)
+    e, model_data = _service.get_model_by_id(model_id)
 
+    if e:
+        raise CustomHTTPException(
+            type_="/internal-server-error",
+            title="Internal Server Error at Service",
+            status=500,
+            detail=str(e)
+        )
+    
     if not model_data:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Model not found."
+        raise CustomHTTPException(
+            type_="/not-found",
+            title="Not Found",
+            status=404,
+            detail="Data not found or empty"
         )
 
     return response.GetModelResponse(
