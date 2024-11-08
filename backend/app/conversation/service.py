@@ -27,14 +27,17 @@ class ConversationService:
             return e, []
 
     def get_all_conversations(self, jwtData, limit) -> list[model.Conversation]:
-        conversations = (
-            self.session.query(model.Conversation)
-            .filter_by(user_id=jwtData["id"])
-            .order_by(model.Conversation.updated_at.desc())
-            .all()[:limit]
-        )
+        try:
+            conversations = (
+                self.session.query(model.Conversation)
+                .filter_by(user_id=jwtData["id"])
+                .order_by(model.Conversation.updated_at.desc())
+                .all()[:limit]
+            )
+            return None, conversations
+        except Exception as e:
+            return e, None
 
-        return conversations
 
     def create_conversation(
         self, jwtData, message

@@ -75,6 +75,10 @@ class UserService:
         print(token)
         return None, token
 
-    def get_user_detail(self, jwtData) -> User:
-        user = self.session.query(User).filter_by(id=jwtData["id"]).first()
-        return user
+    def get_user_detail(self, jwtData) -> tuple[Exception, User]:
+        try:
+            user = self.session.query(User).filter_by(id=jwtData["id"]).first()
+            return None, user
+        
+        except Exception as e:
+            return e, None
