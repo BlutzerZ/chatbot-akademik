@@ -1,14 +1,15 @@
 "use client";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import ChatPageLayout from "./ChatPageLayout";
+
+import ChatPage from "./ChatPage";
 
 const queryClient = new QueryClient();
 
-export default function ChatPage() {
+export default function TestPage() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ChatPageLayout />
+      <ChatPage />
     </QueryClientProvider>
   );
 }

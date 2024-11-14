@@ -5,7 +5,7 @@ import Logo from "@/components/Logo";
 import NoSsr from "@/components/NoSsr";
 import ToggleTheme from "@/components/ToggleTheme";
 import Head from "next/head";
-import Link from "next/link";
+// import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEventHandler, useState } from "react";
 
@@ -27,9 +27,6 @@ export default function SignInPage() {
           password,
         },
       });
-
-      setLoading(false);
-
       if (!result.error) {
         const res = result.data;
         const token = res.data.token;
@@ -40,9 +37,10 @@ export default function SignInPage() {
         // TODO: Change this later
         setError(JSON.stringify(result.error));
       }
+      setLoading(false);
     } catch {
       setLoading(false);
-      setError("Error");
+      setError("Username atau password salah");
     }
   };
 
@@ -83,7 +81,7 @@ export default function SignInPage() {
                 />
               </label>
             </div>
-            <div className="space-y-3">
+            <div className="mb-5 space-y-3">
               <button
                 type="submit"
                 className="btn btn-primary w-full"
@@ -100,13 +98,13 @@ export default function SignInPage() {
                 )}
               </button>
               {error && <p className="font-bold text-error">{error}</p>}
-              <Link
+              {/* <Link
                 href={"/"}
                 type="button"
                 className="btn btn-ghost btn-secondary w-full"
               >
                 Lupa password?
-              </Link>
+              </Link> */}
             </div>
           </form>
 
