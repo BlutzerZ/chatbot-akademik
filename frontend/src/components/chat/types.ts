@@ -14,5 +14,20 @@ export type ChatMessage = {
   regeneratable?: boolean;
   reportable?: boolean;
   avatarUrl?: string;
-  createdAt?: Date;
+  created_at?: string;
+};
+
+export type Message = {
+  id: string;
+  role: string;
+  content: string;
+  conversation_id: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type MessagesResponse = {
+  data: {
+    data: Message[];
+  };
 };

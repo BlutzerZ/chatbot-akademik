@@ -1,14 +1,24 @@
 import Icon from "@/components/Icon";
+// import { Conversations } from "@/types/ConversationTypes";
 import Link from "next/link";
 import React, { FC } from "react";
 
+type Conversation = {
+  id: string;
+  created_at: string;
+  updated_at: string;
+};
+
 type Props = React.PropsWithChildren<{
+  conversations?: Conversation[];
+  isPending?: boolean;
   className?: string;
   activeChatId?: string;
   onActiveChatIdChange?: (chatId: string) => void;
 }>;
 
 const ChatLayout: FC<Props> = ({ className = "", ...props }) => {
+  // console.log(props.conversations);
   return (
     <>
       <div className="drawer h-screen md:drawer-open">
@@ -37,16 +47,16 @@ const ChatLayout: FC<Props> = ({ className = "", ...props }) => {
             </div>
 
             <div className="menu block h-full w-80 space-y-2 overflow-y-auto p-4 text-base-content md:bg-base-200">
-              {Array.from({ length: 50 }).map((_, i) => (
+              {props.conversations?.map((conversation) => (
                 <Link
-                  key={i}
-                  href={`${process.env.NEXT_PUBLIC_HOST}/chat/${i}`}
-                  className={` ${props.activeChatId === i.toString() ? "active font-bold" : ""}`}
+                  key={conversation.id}
+                  href={`/chat/${conversation.id}`}
+                  className={`${props.activeChatId === conversation.id ? "active font-bold" : ""}`}
                 >
                   <button
-                    className={`w-full rounded-md px-6 py-4 text-start hover:bg-base-200 md:hover:bg-base-100 ${props.activeChatId === i.toString() ? "bg-base-200 md:bg-base-300" : ""}`}
+                    className={`w-full rounded-md px-6 py-4 text-start hover:bg-base-200 md:hover:bg-base-100 ${props.activeChatId === conversation.id ? "bg-base-200 md:bg-base-300" : ""}`}
                   >
-                    Item {i}
+                    {new Date(conversation.created_at).toLocaleString()}
                   </button>
                 </Link>
               ))}
