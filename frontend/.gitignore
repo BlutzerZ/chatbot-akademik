@@ -1,3 +1,5 @@
+.env
+
 /src/api/backend-schema.d.ts
 
 /.vscode
