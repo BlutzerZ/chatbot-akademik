@@ -1,13 +1,12 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse
 from config import database
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.user.routes import router as UserRouter
 from app.conversation.routes import router as ConversationRouter
 from app.modelAI.routes import router as ModelRouter
-from app.modelAI import model
+from app.feedback.routes import router as FeedbackRouter
 from exceptions.handlers import custom_http_exception_handler, validation_exception_handler
 from exceptions.custom_exceptions import CustomHTTPException
 from exceptions.schemas.custom_error_schema import CustomErrorSchema
@@ -30,6 +29,7 @@ app.add_middleware(
 app.include_router(UserRouter)
 app.include_router(ConversationRouter)
 app.include_router(ModelRouter)
+app.include_router(FeedbackRouter)
 
 
 

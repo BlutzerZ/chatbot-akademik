@@ -201,21 +201,20 @@ async def create_message_by_coverstaion_id(
 
 
 @router.get(
-    "/conversations/{conversation_id}/messages/{message_id}",
+    "/messages/{message_id}",
     dependencies=[Depends(middleware.JWTBearer())],
     response_model=response.GetMessageByIDResponse,
     tags=["Conversation"],
 )
-async def get_message_with_convetsation_id_and_message_id(
+async def get_message_by_id(
     request: Request,
-    conversation_id: UUID,
     message_id: UUID,
     session: Session = Depends(get_db),
 ):
 
     _service = service.ConversationService(session)
-    e, message = _service.get_message_by_id(
-        request.state.jwtData, message_id, conversation_id
+    e, message = _service.get_message_by_id_pure(
+        request.state.jwtData, message_id
     )
 
     if e:
@@ -235,12 +234,3 @@ async def get_message_with_convetsation_id_and_message_id(
         )
 
     return response.GetMessageByIDResponse(code=200, message="Loh valid", data=message)
-
-
-# @router.post("/conversations/{convesation_id}/messages/{message_id}/feedback", dependencies=[Depends(jwt.JWTBearer())], response_model=response.UserDetailResponse, tags=["Conversation"])
-# async def user_detail(
-#         request: Request,
-#         session: Session = Depends(get_db)
-#     ):
-
-#     return response.UserDetailResponse(code=200, message="Loh valid", data=[user_detail])

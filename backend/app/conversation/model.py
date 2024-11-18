@@ -73,15 +73,3 @@ class GenerationLog(Base):
     )
     message_id = Column(UUID(as_uuid=True), ForeignKey("message.id"), unique=True)
     data = Column(String())
-
-
-class Feedback(Base):
-    __tablename__ = "feedback"
-
-    id = Column(
-        UUID(as_uuid=True), primary_key=True, default=uuid7, unique=True, nullable=False
-    )
-    score = Column(Float(), nullable=False)
-    content = Column(String(), nullable=True)  # we can change this later
-    created_at = Column(DateTime, default=datetime.today())
-    updated_at = Column(DateTime, default=datetime.today(), onupdate=datetime.today())

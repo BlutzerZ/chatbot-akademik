@@ -135,3 +135,18 @@ class ConversationService:
             return e, []
 
         return e, message
+
+    def get_message_by_id_pure(self, jwtData, messageID) -> model.Message:
+        try:
+            message = (
+                self.session.query(model.Message)
+                .join(model.Conversation, model.Message.conversation_id == model.Conversation.id)
+                .filter(
+                    model.Message.id == messageID,
+                    model.Conversation.user_id == jwtData["id"]
+                )
+                .first()
+            )
+            return None, message
+        except Exception as e:
+            return e, None
