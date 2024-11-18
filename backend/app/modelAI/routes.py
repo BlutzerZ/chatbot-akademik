@@ -40,15 +40,15 @@ async def get_all_models(
             type_="/internal-server-error",
             title="Internal Server Error at Service",
             status=500,
-            detail=str(e)
+            detail=str(e),
         )
-    
+
     if not models:
         raise CustomHTTPException(
             type_="/not-found",
             title="Not Found",
             status=404,
-            detail="Data not found or empty"
+            detail="Data not found or empty",
         )
 
     return response.GetAllModelResponse(
@@ -76,15 +76,15 @@ async def create_model(
             type_="/internal-server-error",
             title="Internal Server Error at Service",
             status=500,
-            detail=str(e)
+            detail=str(e),
         )
-    
+
     if not new_model:
         raise CustomHTTPException(
             type_="/not-found",
             title="Not Found",
             status=404,
-            detail="Data not found or empty"
+            detail="Data not found or empty",
         )
     return response.GetModelResponse(
         code=status.HTTP_201_CREATED,
@@ -111,15 +111,15 @@ async def get_model_by_id(
             type_="/internal-server-error",
             title="Internal Server Error at Service",
             status=500,
-            detail=str(e)
+            detail=str(e),
         )
-    
+
     if not model_data:
         raise CustomHTTPException(
             type_="/not-found",
             title="Not Found",
             status=404,
-            detail="Data not found or empty"
+            detail="Data not found or empty",
         )
 
     return response.GetModelResponse(

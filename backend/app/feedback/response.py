@@ -23,7 +23,8 @@ class FeedbackMessageResponse(BaseModel):
     code: int
     message: str
     data: FeedbackDetail
-    
+
+
 class GetAllFeedbackResponse(BaseModel):
     code: int
     message: str

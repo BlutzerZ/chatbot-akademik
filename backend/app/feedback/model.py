@@ -1,4 +1,13 @@
-from sqlalchemy import Column, Enum, DateTime, Float, Integer, ForeignKey, String, Boolean
+from sqlalchemy import (
+    Column,
+    Enum,
+    DateTime,
+    Float,
+    Integer,
+    ForeignKey,
+    String,
+    Boolean,
+)
 from sqlalchemy.dialects.postgresql import UUID
 from uuid_extensions import uuid7
 from config.database import Base

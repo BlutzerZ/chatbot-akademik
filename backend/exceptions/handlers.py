@@ -3,6 +3,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from exceptions.custom_exceptions import CustomHTTPException
 
+
 async def custom_http_exception_handler(request: Request, exc: CustomHTTPException):
     return JSONResponse(
         status_code=exc.status,
@@ -15,10 +16,10 @@ async def custom_http_exception_handler(request: Request, exc: CustomHTTPExcepti
         },
     )
 
+
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
     validation_errors = [
-        f"{error['loc'][-1]}: {error['msg']}"
-        for error in exc.errors()
+        f"{error['loc'][-1]}: {error['msg']}" for error in exc.errors()
     ]
     return JSONResponse(
         status_code=422,

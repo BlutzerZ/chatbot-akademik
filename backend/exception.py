@@ -1,5 +1,6 @@
 from typing import List, Optional
 
+
 class CustomHTTPException(Exception):
     def __init__(
         self,

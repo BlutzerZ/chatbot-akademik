@@ -33,15 +33,15 @@ async def get_all_conversation(
             type_="/internal-server-error",
             title="Internal Server Error at Service",
             status=500,
-            detail=str(e)
+            detail=str(e),
         )
-    
+
     if not conversations:
         raise CustomHTTPException(
             type_="/not-found",
             title="Not Found",
             status=404,
-            detail="Data not found or empty"
+            detail="Data not found or empty",
         )
 
     return response.GetAllConversationResponse(
@@ -69,15 +69,15 @@ async def create_conversation(
             type_="/internal-server-error",
             title="Internal Server Error at Service",
             status=500,
-            detail=str(e)
+            detail=str(e),
         )
-    
+
     if not messages:
         raise CustomHTTPException(
             type_="/not-found",
             title="Not Found",
             status=404,
-            detail="Data not found or empty"
+            detail="Data not found or empty",
         )
 
     return response.CreateConversationOrMessageResponse(
@@ -107,17 +107,17 @@ async def get_conversation_by_id(
             type_="/internal-server-error",
             title="Internal Server Error at Service",
             status=500,
-            detail=str(e)
+            detail=str(e),
         )
-    
+
     if not conversation:
         raise CustomHTTPException(
             type_="/not-found",
             title="Not Found",
             status=404,
-            detail="Data not found or empty"
+            detail="Data not found or empty",
         )
-    
+
     return response.GetConversationByIDResponse(
         code=200, message="Loh valid", data=conversation
     )
@@ -145,17 +145,17 @@ async def get_conversation_by_id_with_message(
             type_="/internal-server-error",
             title="Internal Server Error at Service",
             status=500,
-            detail=str(e)
+            detail=str(e),
         )
-    
+
     if not conversation:
         raise CustomHTTPException(
             type_="/not-found",
             title="Not Found",
             status=404,
-            detail="Data not found or empty"
+            detail="Data not found or empty",
         )
-    
+
     return response.GetConversationByIDWithMessageResponse(
         code=200, message="Loh valid", data=conversation.messages
     )
@@ -184,15 +184,15 @@ async def create_message_by_coverstaion_id(
             type_="/internal-server-error",
             title="Internal Server Error at Service",
             status=500,
-            detail=str(e)
+            detail=str(e),
         )
-    
+
     if not message:
         raise CustomHTTPException(
             type_="/not-found",
             title="Not Found",
             status=404,
-            detail="Data not found or empty"
+            detail="Data not found or empty",
         )
 
     return response.CreateConversationOrMessageResponse(
@@ -213,24 +213,22 @@ async def get_message_by_id(
 ):
 
     _service = service.ConversationService(session)
-    e, message = _service.get_message_by_id_pure(
-        request.state.jwtData, message_id
-    )
+    e, message = _service.get_message_by_id(request.state.jwtData, message_id)
 
     if e:
         raise CustomHTTPException(
             type_="/internal-server-error",
             title="Internal Server Error at Service",
             status=500,
-            detail=str(e)
+            detail=str(e),
         )
-    
+
     if not message:
         raise CustomHTTPException(
             type_="/not-found",
             title="Not Found",
             status=404,
-            detail="Data not found or empty"
+            detail="Data not found or empty",
         )
 
     return response.GetMessageByIDResponse(code=200, message="Loh valid", data=message)

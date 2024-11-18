@@ -38,7 +38,6 @@ class ConversationService:
         except Exception as e:
             return e, None
 
-
     def create_conversation(
         self, jwtData, message
     ) -> tuple[Exception, list[model.Message]]:
@@ -136,14 +135,17 @@ class ConversationService:
 
         return e, message
 
-    def get_message_by_id_pure(self, jwtData, messageID) -> model.Message:
+    def get_message_by_ide(self, jwtData, messageID) -> model.Message:
         try:
             message = (
                 self.session.query(model.Message)
-                .join(model.Conversation, model.Message.conversation_id == model.Conversation.id)
+                .join(
+                    model.Conversation,
+                    model.Message.conversation_id == model.Conversation.id,
+                )
                 .filter(
                     model.Message.id == messageID,
-                    model.Conversation.user_id == jwtData["id"]
+                    model.Conversation.user_id == jwtData["id"],
                 )
                 .first()
             )

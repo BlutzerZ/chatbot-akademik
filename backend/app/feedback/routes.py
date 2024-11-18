@@ -11,6 +11,7 @@ from uuid import UUID
 
 router = APIRouter()
 
+
 @router.get(
     "/feedback",
     dependencies=[Depends(middleware.JWTBearer())],
@@ -18,7 +19,7 @@ router = APIRouter()
     tags=["Feedback"],
 )
 async def get_all_feedback(
-    request: Request, 
+    request: Request,
     session: Session = Depends(get_db),
 ):
 
@@ -30,20 +31,19 @@ async def get_all_feedback(
             type_="/internal-server-error",
             title="Internal Server Error at Service",
             status=500,
-            detail=str(e)
+            detail=str(e),
         )
-    
+
     if not feedback:
         raise CustomHTTPException(
             type_="/not-found",
             title="Not Found",
             status=404,
-            detail="Data not found or empty"
+            detail="Data not found or empty",
         )
 
-    return response.GetAllFeedbackResponse(
-        code=200, message="Loh valid", data=feedback
-    )
+    return response.GetAllFeedbackResponse(code=200, message="Loh valid", data=feedback)
+
 
 @router.get(
     "/feedback/{feedbacks_id}",
@@ -52,7 +52,7 @@ async def get_all_feedback(
     tags=["Feedback"],
 )
 async def get_feedback_by_id(
-    request: Request, 
+    request: Request,
     feedbacks_id: UUID,
     session: Session = Depends(get_db),
 ):
@@ -68,15 +68,15 @@ async def get_feedback_by_id(
             type_="/internal-server-error",
             title="Internal Server Error at Service",
             status=500,
-            detail=str(e)
+            detail=str(e),
         )
-    
+
     if not feedback:
         raise CustomHTTPException(
             type_="/not-found",
             title="Not Found",
             status=404,
-            detail="Data not found or empty"
+            detail="Data not found or empty",
         )
 
     return response.FeedbackMessageResponse(
@@ -91,7 +91,7 @@ async def get_feedback_by_id(
     tags=["Feedback"],
 )
 async def feedback_to_message(
-    request: Request, 
+    request: Request,
     messages_id: UUID,
     data: request.FeedbackRequest,
     session: Session = Depends(get_db),
@@ -100,9 +100,7 @@ async def feedback_to_message(
     _service = service.FeedbackService(session)
     print(data)
     e, feedback = _service.feedback_by_message(
-        jwtData=request.state.jwtData,
-        message_id=messages_id,
-        data=data
+        jwtData=request.state.jwtData, message_id=messages_id, data=data
     )
 
     if e:
@@ -110,15 +108,15 @@ async def feedback_to_message(
             type_="/internal-server-error",
             title="Internal Server Error at Service",
             status=500,
-            detail=str(e)
+            detail=str(e),
         )
-    
+
     if not feedback:
         raise CustomHTTPException(
             type_="/not-found",
             title="Not Found",
             status=404,
-            detail="Data not found or empty"
+            detail="Data not found or empty",
         )
 
     return response.FeedbackMessageResponse(
