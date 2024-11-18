@@ -1,6 +1,7 @@
 from typing import List, Optional
 from fastapi import HTTPException
 
+
 class CustomHTTPException(HTTPException):
     def __init__(
         self,

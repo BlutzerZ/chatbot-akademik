@@ -1,14 +1,16 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse
 from config import database
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.user.routes import router as UserRouter
 from app.conversation.routes import router as ConversationRouter
 from app.modelAI.routes import router as ModelRouter
-from app.modelAI import model
-from exceptions.handlers import custom_http_exception_handler, validation_exception_handler
+from app.feedback.routes import router as FeedbackRouter
+from exceptions.handlers import (
+    custom_http_exception_handler,
+    validation_exception_handler,
+)
 from exceptions.custom_exceptions import CustomHTTPException
 from exceptions.schemas.custom_error_schema import CustomErrorSchema
 
@@ -30,7 +32,7 @@ app.add_middleware(
 app.include_router(UserRouter)
 app.include_router(ConversationRouter)
 app.include_router(ModelRouter)
-
+app.include_router(FeedbackRouter)
 
 
 # Exceptions
@@ -38,35 +40,25 @@ app.add_exception_handler(CustomHTTPException, custom_http_exception_handler)
 app.add_exception_handler(RequestValidationError, validation_exception_handler)
 # Override documentaion for error handling
 original_openapi = app.openapi
+
+
 def custom_openapi():
-    if app.openapi_schema: 
+    if app.openapi_schema:
         return app.openapi_schema
-    openapi_schema = original_openapi()  
+    openapi_schema = original_openapi()
     validation_error_response = {
         "description": "Validation Error",
-        "content": {
-            "application/json": {
-                "schema": CustomErrorSchema.schema()
-            }
-        },
+        "content": {"application/json": {"schema": CustomErrorSchema.schema()}},
     }
     custom_responses = {
         "404": {
             "description": "Not Found",
-            "content": {
-                "application/json": {
-                    "schema": CustomErrorSchema.schema()
-                }
-            }
+            "content": {"application/json": {"schema": CustomErrorSchema.schema()}},
         },
         "500": {
             "description": "Internal Server Error",
-            "content": {
-                "application/json": {
-                    "schema": CustomErrorSchema.schema()
-                }
-            }
-        }
+            "content": {"application/json": {"schema": CustomErrorSchema.schema()}},
+        },
     }
     for path in openapi_schema["paths"].values():
         for method in path.values():
@@ -74,7 +66,8 @@ def custom_openapi():
             responses.update(custom_responses)
             if responses and "422" in responses:
                 responses["422"] = validation_error_response
-    app.openapi_schema = openapi_schema 
+    app.openapi_schema = openapi_schema
     return app.openapi_schema
+
 
 app.openapi = custom_openapi

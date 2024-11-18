@@ -19,27 +19,19 @@ class UserService:
         user = self.session.query(User).filter(User.username == username).first()
         if not user:
             try:
-                user = model.User(
-                    username=username,
-                    token=pwo.generate()
-                )
+                user = model.User(username=username, token=pwo.generate())
                 self.session.add(user)
                 self.session.commit()
                 self.session.refresh(user)
-
 
             except Exception as e:
                 self.session.rollback()
                 return e, None
 
-        token = jwt.generate_token({
-            "id": user.id,
-            "username": user.username
-        })
+        token = jwt.generate_token({"id": user.id, "username": user.username})
         return None, token
 
-
-    def auth(self, data:request.UserAuthRequest) -> response.UserAuthResponse:        
+    def auth(self, data: request.UserAuthRequest) -> response.UserAuthResponse:
         # testing mode
         if data.username == data.password:
             testingLogin = True
@@ -58,9 +50,7 @@ class UserService:
                 raise
 
             return response.UserAuthResponse(
-                code=200,
-                message=f"Authentication Valid" ,
-                data={"token": token}
+                code=200, message=f"Authentication Valid", data={"token": token}
             )
 
         else:
@@ -79,6 +69,6 @@ class UserService:
         try:
             user = self.session.query(User).filter_by(id=jwtData["id"]).first()
             return None, user
-        
+
         except Exception as e:
             return e, None
