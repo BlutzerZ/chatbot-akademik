@@ -51,7 +51,7 @@ async def get_all_feedback(
     response_model=response.FeedbackMessageResponse,
     tags=["Feedback"],
 )
-async def feedback_to_message(
+async def get_feedback_by_id(
     request: Request, 
     feedbacks_id: UUID,
     session: Session = Depends(get_db),
