@@ -29,7 +29,7 @@ class ErrorResponse(BaseModel):
 class UserDetail(BaseModel):
     id: UUID
     username: str
-    role: RoleDetail
+    deleted_at: datetime | None
     created_at: datetime
     updated_at: datetime
 
@@ -56,4 +56,4 @@ class User(BaseModel):
 class GetAllUsersResponse(BaseModel):
     code: int
     message: str
-    data: list[User]
+    data: list[UserDetail]

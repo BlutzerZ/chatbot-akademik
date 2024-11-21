@@ -23,6 +23,7 @@ def create_superuser(username: str, token: str):
         session.add(user)
         session.add(role)
         session.commit()
+        print(user.role.name)
         print(f"Superuser '{username}' berhasil dibuat.")
     except IntegrityError as e:
         session.rollback()

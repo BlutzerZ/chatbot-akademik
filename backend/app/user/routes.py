@@ -1,4 +1,4 @@
-from typing import Annotated, Union
+from typing import Annotated, Literal, Union
 
 from fastapi.responses import RedirectResponse
 from fastapi.security import HTTPBearer, OAuth2PasswordBearer
@@ -6,7 +6,7 @@ from app.user.service import UserService
 from middleware.jwt import JWTBearer
 from config.database import get_db
 from app.user import request, response
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, Form, HTTPException, Request
 from sqlalchemy.orm import Session
 from exceptions.custom_exceptions import CustomHTTPException
 from uuid import UUID
@@ -19,7 +19,7 @@ oauth2_scheme = HTTPBearer()
 
 
 # Replace these with your own values from the Google Developer Console
-@router.get("/auth/sing-in/google", tags=["User"])
+@router.get("/auth/sing-in/google", tags=["Auth"])
 async def login_google(callback_url: str):
     state = urlencode({"callback_url": callback_url})
     return {
@@ -67,7 +67,7 @@ async def auth_google(
     return RedirectResponse(url=f"{callbackUrl}?access_token={token}")
 
 
-@router.post("/auth/sign-in", response_model=response.UserAuthResponse, tags=["User"])
+@router.post("/auth/sign-in", response_model=response.UserAuthResponse, tags=["Auth"])
 async def user_authentication(
     data: request.UserAuthRequest, session: Session = Depends(get_db)
 ):
@@ -111,7 +111,7 @@ async def user_detail(request: Request, session: Session = Depends(get_db)):
     "/auth/refresh-token",
     dependencies=[Depends(JWTBearer())],
     response_model=response.UserAuthResponse,
-    tags=["User"],
+    tags=["Auth"],
 )
 async def refresh_token(request: Request, session: Session = Depends(get_db)):
     _service = UserService(session)
@@ -141,15 +141,55 @@ async def refresh_token(request: Request, session: Session = Depends(get_db)):
     )
 
 
+@router.put(
+    "/users",
+    dependencies=[Depends(JWTBearer())],
+    response_model=response.UserDetailResponse,
+    tags=["User"],
+)
+async def edit_user(
+    request: Request, data: request.UserEditRequest, session: Session = Depends(get_db)
+):
+    _service = UserService(session)
+    e, user = _service.edit_user_by_id(
+        request.state.jwtData, request.state.jwtData["id"], data
+    )
+    if e:
+        raise CustomHTTPException(
+            type_="/internal-server-error",
+            title="Internal Server Error at Service",
+            status=500,
+            detail=str(e),
+        )
+
+    if not user:
+        raise CustomHTTPException(
+            type_="/not-found",
+            title="Not Found",
+            status=404,
+            detail="Data not found or empty",
+        )
+
+    return response.UserDetailResponse(
+        code=200,
+        message="Loh valid",
+        data=user,
+    )
+
+
 @router.get(
     "/users",
     dependencies=[Depends(JWTBearer())],
     response_model=response.GetAllUsersResponse,
     tags=["User"],
 )
-async def get_all_user(request: Request, session: Session = Depends(get_db)):
+async def get_all_user(
+    request: Request,
+    filterData: request.UserFiltersRequest = Depends(),
+    session: Session = Depends(get_db),
+):
     _service = UserService(session)
-    e, users = _service.get_users(request.state.jwtData)
+    e, users = _service.get_users(request.state.jwtData, filterData)
     if e:
         raise CustomHTTPException(
             type_="/internal-server-error",
@@ -170,6 +210,42 @@ async def get_all_user(request: Request, session: Session = Depends(get_db)):
         code=200,
         message="Loh valid",
         data=users,
+    )
+
+
+@router.post(
+    "/users",
+    dependencies=[Depends(JWTBearer())],
+    response_model=response.UserDetailResponse,
+    tags=["User"],
+)
+async def create_user(
+    request: Request,
+    data: request.UserCreateRequest,
+    session: Session = Depends(get_db),
+):
+    _service = UserService(session)
+    e, user = _service.create_user(data.username)  # should be change
+    if e:
+        raise CustomHTTPException(
+            type_="/internal-server-error",
+            title="Internal Server Error at Service",
+            status=500,
+            detail=str(e),
+        )
+
+    if not user:
+        raise CustomHTTPException(
+            type_="/not-found",
+            title="Not Found",
+            status=404,
+            detail="Data not found or empty",
+        )
+
+    return response.UserDetailResponse(
+        code=200,
+        message="Loh valid",
+        data=user,
     )
 
 
@@ -213,11 +289,48 @@ async def get_user_by_id(
     response_model=response.UserDetailResponse,
     tags=["User"],
 )
-async def get_user_by_id(
+async def edit_user_by_id(
+    request: Request,
+    user_id: UUID,
+    data: request.UserEditRequest,
+    session: Session = Depends(get_db),
+):
+    _service = UserService(session)
+    e, user = _service.edit_user_by_id(request.state.jwtData, user_id, data)
+    if e:
+        raise CustomHTTPException(
+            type_="/internal-server-error",
+            title="Internal Server Error at Service",
+            status=500,
+            detail=str(e),
+        )
+
+    if not user:
+        raise CustomHTTPException(
+            type_="/not-found",
+            title="Not Found",
+            status=404,
+            detail="Data not found or empty",
+        )
+
+    return response.UserDetailResponse(
+        code=200,
+        message="Loh valid",
+        data=user,
+    )
+
+
+@router.delete(
+    "/users/{user_id}",
+    dependencies=[Depends(JWTBearer())],
+    response_model=response.UserDetailResponse,
+    tags=["User"],
+)
+async def delete_user(
     request: Request, user_id: UUID, session: Session = Depends(get_db)
 ):
     _service = UserService(session)
-    e, user = _service.get_user_by_id(request.state.jwtData, user_id)
+    e, user = _service.delete_user_by_id(request.state.jwtData, user_id)
     if e:
         raise CustomHTTPException(
             type_="/internal-server-error",

@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from app.user import request, response, model
 from password_generator import PasswordGenerator
 
+from datetime import datetime
 from helper import jwt
 from helper.role import is_admin, is_user
 
@@ -15,7 +16,8 @@ class UserService:
     def __init__(self, session: Session):
         self.session = session
 
-    def create_user(self, username) -> list[Exception, model.User]:
+    def create_user(self, username) -> list[Exception, model.User]:  # should be change
+        # if is_admin(jwtData):
         try:
             user = model.User(username=username, token=pwo.generate())
             role = model.Role(name=model.RoleType.user, user=user)
@@ -91,10 +93,52 @@ class UserService:
         except Exception as e:
             return e, None
 
-    def get_users(self, jwtData) -> list[Exception, model.User]:
+    def get_users(self, jwtData, filterData) -> list[Exception, model.User]:
         if is_admin(jwtData):
             try:
-                users = self.session.query(model.User).all()
+                # Start
+                query = self.session.query(model.User)
+
+                # Search
+                if filterData.search_query:
+                    query = query.filter(
+                        model.User.username.ilike(f"%{filterData.search_query}%")
+                    )
+
+                if filterData.include_deleted:
+                    query = query.filter(
+                        model.User.deleted_at.isnot(None)
+                    )  # Hanya tampilkan jika 'deleted_by' tidak kosong
+
+                # Date
+                if filterData.start_date:
+                    query = query.filter(model.User.created_at >= filterData.start_date)
+                if filterData.end_date:
+                    query = query.filter(model.User.created_at <= filterData.end_date)
+
+                # order_by
+                field = (
+                    getattr(model.User, filterData.sort_by)
+                    if filterData.sort_by and hasattr(model.User, filterData.sort_by)
+                    else model.User.id
+                )
+
+                # sort
+                if filterData.order and filterData.order.lower() == "desc":
+                    query = query.order_by(field.desc())
+                else:
+                    query = query.order_by(field.asc())
+
+                # Pagination
+                if filterData.page and filterData.limit:
+                    offset = (filterData.page - 1) * filterData.limit
+                    query = query.offset(offset).limit(filterData.limit)
+                elif filterData.limit:
+                    query = query.limit(filterData.limit)
+
+                # Execute
+                users = query.all()
+
                 return None, users
             except Exception as e:
                 return e, None
@@ -109,31 +153,57 @@ class UserService:
 
             except Exception as e:
                 return e, None
-
         else:
-            Exception("User is not Allowed"), None
+            return Exception("User is not Allowed"), None
 
-    def get_user_by_id(self, jwtData, userID, data) -> list[Exception, model.User]:
-        e, user = self.get_user_by_id(userID)
+    def edit_user_by_id(self, jwtData, userID, data) -> list[Exception, model.User]:
+        if is_admin(jwtData):
+            e, user = self.get_user_by_id(jwtData, userID)
+        elif is_user(jwtData):
+            e, user = self.get_user_detail(jwtData)
+        else:
+            return Exception("Invalid Role"), None
+
         if e:
             return e, None
 
-        if "username" in data:
-            user.username = data["username"]
+        if data.new_username:
+            user.username = data.new_username
 
-        if "role" in data:
-            try:
-                role_type = model.RoleType[data["role"].upper()]
-            except Exception as e:
-                return e, None
+        if is_admin(jwtData):
 
-            if user.role:
-                user.role.name = role_type
+            if data.new_role:
+                try:
+                    role_type = model.RoleType[data.new_role.lower()]
+                except Exception as e:
+                    return e, None
+
+                if user.role:
+                    user.role.name = role_type
+                else:
+                    new_role = model.Role(name=role_type, user_id=user.id)
+                    self.session.add(new_role)
             else:
-                new_role = model.Role(name=role_type, user_id=user.id)
-                self.session.add(new_role)
+                return Exception("User is not Allowed"), None
 
-        self.session.commit()
-        self.session.refresh(user)
+            self.session.commit()
+            self.session.refresh(user)
 
         return None, user
+
+    def delete_user_by_id(self, jwtData, userID) -> list[Exception, model.User]:
+        if is_admin(jwtData):
+            e, user = self.get_user_by_id(jwtData, userID)
+            if e:
+                return e, None
+
+            try:
+                user.deleted_at = datetime.today()
+                self.session.add(user)
+                self.session.commit()
+                self.session.refresh(user)
+
+                return None, user
+            except Exception as e:
+                self.session.rollback()
+                return e, None
