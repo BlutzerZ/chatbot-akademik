@@ -6,6 +6,7 @@ from app.conversation.model import (
     Message as ModelMessage,
     RoleEnum,
 )
+from helper.role import is_admin
 
 
 class FeedbackService:
@@ -14,27 +15,33 @@ class FeedbackService:
         self.cs = ConversationService(session)
 
     def get_all_feedback(self, jwtData) -> list[Exception, model.Feedback]:
-        try:
-            feedbacks = (
-                self.session.query(model.Feedback)
-                .order_by(model.Feedback.created_at.desc())
-                .all()
-            )
-            return None, feedbacks
+        if is_admin(jwtData):
+            try:
+                feedbacks = (
+                    self.session.query(model.Feedback)
+                    .order_by(model.Feedback.created_at.desc())
+                    .all()
+                )
+                return None, feedbacks
 
-        except Exception as e:
-            return e, None
+            except Exception as e:
+                return e, None
+        else:
+            return Exception("User Not Allowed"), None
 
     def get_feedback_by_id(
         self, jwtData, feedback_id
     ) -> list[Exception, model.Feedback]:
-        try:
-            feedback = (
-                self.session.query(model.Feedback).filter_by(id=feedback_id).first()
-            )
-            return None, feedback
-        except Exception as e:
-            return e, None
+        if is_admin(jwtData):
+            try:
+                feedback = (
+                    self.session.query(model.Feedback).filter_by(id=feedback_id).first()
+                )
+                return None, feedback
+            except Exception as e:
+                return e, None
+        else:
+            return Exception("User Not Allowed"), None
 
     def feedback_by_message(
         self, jwtData, message_id, data

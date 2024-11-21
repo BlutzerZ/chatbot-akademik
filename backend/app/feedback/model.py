@@ -1,17 +1,23 @@
+import enum
 from sqlalchemy import (
     Column,
-    Enum,
     DateTime,
-    Float,
-    Integer,
+    Enum,
     ForeignKey,
     String,
     Boolean,
 )
+from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import UUID
 from uuid_extensions import uuid7
 from config.database import Base
 from datetime import datetime
+
+
+class FeedbackStatus(enum.Enum):
+    valid = "VALID"
+    invalid = "INVALID"
+    in_review = "IN_REVIEW"
 
 
 class Feedback(Base):
@@ -23,6 +29,24 @@ class Feedback(Base):
     user_message_id = Column(UUID(as_uuid=True), ForeignKey("message.id"), unique=True)
     bot_message_id = Column(UUID(as_uuid=True), ForeignKey("message.id"), unique=True)
     score = Column(Boolean(), nullable=False)
-    content = Column(String(), nullable=True)  # we can change this later
+    content = Column(String(), nullable=True)
+    status = Column(
+        Enum(FeedbackStatus), default=FeedbackStatus.in_review, nullable=True
+    )
     created_at = Column(DateTime, default=datetime.today())
     updated_at = Column(DateTime, default=datetime.today(), onupdate=datetime.today())
+
+    role = relationship("FeedbackCorrection", backref="user")
+
+
+class FeedbackCorrection(Base):
+    __tablename__ = "feedback_correction"
+
+    id = Column(
+        UUID(as_uuid=True), primary_key=True, default=uuid7, unique=True, nullable=False
+    )
+    content = Column(String(), nullable=False)
+    created_at = Column(DateTime, default=datetime.today())
+    updated_at = Column(DateTime, default=datetime.today(), onupdate=datetime.today())
+
+    feedback_id = Column(UUID(as_uuid=True), ForeignKey("feedback.id"), unique=True)
