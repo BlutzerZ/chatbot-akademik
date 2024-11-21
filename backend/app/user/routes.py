@@ -9,6 +9,7 @@ from app.user import request, response
 from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from exceptions.custom_exceptions import CustomHTTPException
+from uuid import UUID
 
 from urllib.parse import urlencode, parse_qs, urlparse
 import requests, os
@@ -137,4 +138,104 @@ async def refresh_token(request: Request, session: Session = Depends(get_db)):
         data={
             "token": token,
         },
+    )
+
+
+@router.get(
+    "/users",
+    dependencies=[Depends(JWTBearer())],
+    response_model=response.GetAllUsersResponse,
+    tags=["User"],
+)
+async def get_all_user(request: Request, session: Session = Depends(get_db)):
+    _service = UserService(session)
+    e, users = _service.get_users(request.state.jwtData)
+    if e:
+        raise CustomHTTPException(
+            type_="/internal-server-error",
+            title="Internal Server Error at Service",
+            status=500,
+            detail=str(e),
+        )
+
+    if not users:
+        raise CustomHTTPException(
+            type_="/not-found",
+            title="Not Found",
+            status=404,
+            detail="Data not found or empty",
+        )
+
+    return response.GetAllUsersResponse(
+        code=200,
+        message="Loh valid",
+        data=users,
+    )
+
+
+@router.get(
+    "/users/{user_id}",
+    dependencies=[Depends(JWTBearer())],
+    response_model=response.UserDetailResponse,
+    tags=["User"],
+)
+async def get_user_by_id(
+    request: Request, user_id: UUID, session: Session = Depends(get_db)
+):
+    _service = UserService(session)
+    e, user = _service.get_user_by_id(request.state.jwtData, user_id)
+    if e:
+        raise CustomHTTPException(
+            type_="/internal-server-error",
+            title="Internal Server Error at Service",
+            status=500,
+            detail=str(e),
+        )
+
+    if not user:
+        raise CustomHTTPException(
+            type_="/not-found",
+            title="Not Found",
+            status=404,
+            detail="Data not found or empty",
+        )
+
+    return response.UserDetailResponse(
+        code=200,
+        message="Loh valid",
+        data=user,
+    )
+
+
+@router.put(
+    "/users/{user_id}",
+    dependencies=[Depends(JWTBearer())],
+    response_model=response.UserDetailResponse,
+    tags=["User"],
+)
+async def get_user_by_id(
+    request: Request, user_id: UUID, session: Session = Depends(get_db)
+):
+    _service = UserService(session)
+    e, user = _service.get_user_by_id(request.state.jwtData, user_id)
+    if e:
+        raise CustomHTTPException(
+            type_="/internal-server-error",
+            title="Internal Server Error at Service",
+            status=500,
+            detail=str(e),
+        )
+
+    if not user:
+        raise CustomHTTPException(
+            type_="/not-found",
+            title="Not Found",
+            status=404,
+            detail="Data not found or empty",
+        )
+
+    return response.UserDetailResponse(
+        code=200,
+        message="Loh valid",
+        data=user,
     )

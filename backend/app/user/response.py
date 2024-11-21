@@ -1,10 +1,19 @@
 from datetime import date, datetime
 from pydantic import BaseModel
 from uuid import UUID
+from app.user import model
 
 
 class DetailResponse(BaseModel):
     token: str
+
+
+class RoleDetail(BaseModel):
+    id: UUID
+    name: model.RoleType
+
+    class Config:
+        from_attributes = True
 
 
 class UserAuthResponse(BaseModel):
@@ -20,6 +29,7 @@ class ErrorResponse(BaseModel):
 class UserDetail(BaseModel):
     id: UUID
     username: str
+    role: RoleDetail
     created_at: datetime
     updated_at: datetime
 
@@ -32,3 +42,18 @@ class UserDetailResponse(BaseModel):
     code: int
     message: str
     data: UserDetail
+
+
+class User(BaseModel):
+    id: UUID
+    username: str
+
+    class Config:
+        from_attributes = True
+        arbitrary_types_allowed = True
+
+
+class GetAllUsersResponse(BaseModel):
+    code: int
+    message: str
+    data: list[User]

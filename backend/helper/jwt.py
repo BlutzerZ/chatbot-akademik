@@ -21,6 +21,8 @@ def generate_token(data):
         algorithm=os.getenv("JWT_ALGORITHM"),
     )
 
+    print(token)
+
     return token
 
 
