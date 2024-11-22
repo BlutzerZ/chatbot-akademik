@@ -13,7 +13,7 @@ router = APIRouter()
 
 
 @router.get(
-    "/feedback",
+    "/feedbacks",
     dependencies=[Depends(middleware.JWTBearer())],
     response_model=response.GetAllFeedbackResponse,
     tags=["Feedback"],
@@ -46,21 +46,21 @@ async def get_all_feedback(
 
 
 @router.get(
-    "/feedback/{feedbacks_id}",
+    "/feedbacks/{feedback_id}",
     dependencies=[Depends(middleware.JWTBearer())],
     response_model=response.FeedbackMessageResponse,
     tags=["Feedback"],
 )
 async def get_feedback_by_id(
     request: Request,
-    feedbacks_id: UUID,
+    feedback_id: UUID,
     session: Session = Depends(get_db),
 ):
 
     _service = service.FeedbackService(session)
     e, feedback = _service.get_feedback_by_id(
         jwtData=request.state.jwtData,
-        feedback_id=feedbacks_id,
+        feedback_id=feedback_id,
     )
 
     if e:
@@ -85,22 +85,21 @@ async def get_feedback_by_id(
 
 
 @router.put(
-    "/messages/{messages_id}/feedback",
+    "/messages/{message_id}/feedback",
     dependencies=[Depends(middleware.JWTBearer())],
     response_model=response.FeedbackMessageResponse,
     tags=["Feedback"],
 )
 async def feedback_to_message(
     request: Request,
-    messages_id: UUID,
+    message_id: UUID,
     data: request.FeedbackRequest,
     session: Session = Depends(get_db),
 ):
 
     _service = service.FeedbackService(session)
-    print(data)
     e, feedback = _service.feedback_by_message(
-        jwtData=request.state.jwtData, message_id=messages_id, data=data
+        jwtData=request.state.jwtData, message_id=message_id, data=data
     )
 
     if e:

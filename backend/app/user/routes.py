@@ -19,7 +19,7 @@ oauth2_scheme = HTTPBearer()
 
 
 # Replace these with your own values from the Google Developer Console
-@router.get("/auth/sing-in/google", tags=["Auth"])
+@router.get("/auth/sign-in/google", tags=["Auth"])
 async def login_google(callback_url: str):
     state = urlencode({"callback_url": callback_url})
     return {
@@ -76,7 +76,7 @@ async def user_authentication(
 
 
 @router.get(
-    "/auth/me",
+    "/user",
     dependencies=[Depends(JWTBearer())],
     response_model=response.UserDetailResponse,
     tags=["User"],
@@ -142,7 +142,7 @@ async def refresh_token(request: Request, session: Session = Depends(get_db)):
 
 
 @router.put(
-    "/users",
+    "/user",
     dependencies=[Depends(JWTBearer())],
     response_model=response.UserDetailResponse,
     tags=["User"],
