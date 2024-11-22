@@ -46,7 +46,7 @@ const ChatLayout: FC<Props> = ({ className = "", ...props }) => {
               </Link>
             </div>
 
-            <div className="menu block h-full w-80 space-y-2 overflow-y-auto p-4 text-base-content md:bg-base-200">
+            <div className="menu block h-4/5 w-80 space-y-2 overflow-y-auto p-4 pb-24 text-base-content md:bg-base-200">
               {props.conversations?.map((conversation) => (
                 <Link
                   key={conversation.id}
@@ -56,7 +56,8 @@ const ChatLayout: FC<Props> = ({ className = "", ...props }) => {
                   <button
                     className={`w-full rounded-md px-6 py-4 text-start hover:bg-base-200 md:hover:bg-base-100 ${props.activeChatId === conversation.id ? "bg-base-200 md:bg-base-300" : ""}`}
                   >
-                    {new Date(conversation.created_at).toLocaleString()}
+                    {/* {new Date(conversation.created_at).toLocaleString()} */}
+                    {conversation.id}
                   </button>
                 </Link>
               ))}

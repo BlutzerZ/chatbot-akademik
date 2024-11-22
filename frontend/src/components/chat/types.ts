@@ -18,6 +18,7 @@ export type ChatMessage = {
 };
 
 export type Message = {
+  token?: string;
   id: string;
   role: string;
   content: string;

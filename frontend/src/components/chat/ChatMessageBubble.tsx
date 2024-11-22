@@ -1,9 +1,13 @@
 import { FC } from "react";
-import { ChatMessageRating, MessagesResponse } from "./types";
+import { ChatMessageRating } from "./types";
 import ChatMessageBubbleFooter from "./ChatBubbleFooter";
 
-type Props = MessagesResponse["data"]["data"][0] & {
+type Props = {
   onRate?: (rating: ChatMessageRating) => void;
+  id: string;
+  role?: string;
+  content?: string;
+  created_at?: string;
 };
 
 const ChatMessageBubble: FC<Props> = (props) => {
@@ -11,7 +15,7 @@ const ChatMessageBubble: FC<Props> = (props) => {
 
   return (
     <div
-      className={`chat ${
+      className={`chat py-3 ${
         props.role === "ASSISTANT" ? "chat-start" : "chat-end"
       }`}
     >
@@ -23,7 +27,7 @@ const ChatMessageBubble: FC<Props> = (props) => {
       <div
         className={`chat-header mb-1 ${props.role === "ASSISTANT" ? "ml-3" : "mr-3"}`}
       >
-        <span className="mr-2 font-medium">{props.role}</span>
+        <span className="mr-2 font-bold">{props.role}</span>
         <time className="text-xs opacity-50">{props.created_at}</time>
       </div>
       <div
