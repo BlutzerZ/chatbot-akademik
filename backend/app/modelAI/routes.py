@@ -58,7 +58,7 @@ async def get_all_models(
 
 # POST /model
 @router.post(
-    "/model",
+    "/models",
     dependencies=[Depends(JWTBearer())],
     response_model=response.GetModelResponse,
     tags=["ModelAI"],
@@ -95,7 +95,7 @@ async def create_model(
 
 # GET /model/{model_id}
 @router.get(
-    "/model/{model_id}",
+    "/models/{model_id}",
     dependencies=[Depends(JWTBearer())],
     response_model=response.GetModelResponse,
     tags=["ModelAI"],

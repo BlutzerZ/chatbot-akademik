@@ -15,6 +15,7 @@ class User(Base):
     )
     username = Column(String(255), nullable=False)
     token = Column(String(255), nullable=False)
+    deleted_at = Column(DateTime)
     created_at = Column(DateTime, default=datetime.today())
     updated_at = Column(DateTime, default=datetime.today(), onupdate=datetime.today())
 
