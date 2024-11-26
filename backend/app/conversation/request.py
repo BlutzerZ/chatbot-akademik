@@ -36,6 +36,7 @@ class MessageDetail(BaseModel):
     updated_at: datetime
 
     class Config:
+        from_attributes = True
         arbitrary_types_allowed = True
 
 

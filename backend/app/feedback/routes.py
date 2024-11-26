@@ -11,6 +11,43 @@ from uuid import UUID
 
 router = APIRouter()
 
+@router.put(
+    "/messages/{message_id}/feedback",
+    dependencies=[Depends(middleware.JWTBearer())],
+    response_model=response.FeedbackMessageResponse,
+    tags=["Feedback"],
+)
+async def feedback_to_message(
+    request: Request,
+    message_id: UUID,
+    data: request.FeedbackRequest,
+    session: Session = Depends(get_db),
+):
+
+    _service = service.FeedbackService(session)
+    e, feedback = _service.feedback_by_message(
+        jwtData=request.state.jwtData, message_id=message_id, data=data
+    )
+
+    if e:
+        raise CustomHTTPException(
+            type_="/internal-server-error",
+            title="Internal Server Error at Service",
+            status=500,
+            detail=str(e),
+        )
+
+    if not feedback:
+        raise CustomHTTPException(
+            type_="/not-found",
+            title="Not Found",
+            status=404,
+            detail="Data not found or empty",
+        )
+
+    return response.FeedbackMessageResponse(
+        code=200, message="Loh valid", data=feedback
+    )
 
 @router.get(
     "/feedbacks",
@@ -20,11 +57,12 @@ router = APIRouter()
 )
 async def get_all_feedback(
     request: Request,
+    filterData: request.FeedbackFiltersRequest = Depends(),
     session: Session = Depends(get_db),
 ):
 
     _service = service.FeedbackService(session)
-    e, feedback = _service.get_all_feedback(request.state.jwtData)
+    e, feedback = _service.get_all_feedback(request.state.jwtData, filterData)
 
     if e:
         raise CustomHTTPException(
@@ -83,23 +121,24 @@ async def get_feedback_by_id(
         code=200, message="Loh valid", data=feedback
     )
 
-
 @router.put(
-    "/messages/{message_id}/feedback",
+    "/feedbacks/{feedback_id}/status",
     dependencies=[Depends(middleware.JWTBearer())],
     response_model=response.FeedbackMessageResponse,
     tags=["Feedback"],
 )
-async def feedback_to_message(
+async def get_feedback_by_id(
     request: Request,
-    message_id: UUID,
-    data: request.FeedbackRequest,
+    feedback_id: UUID,
+    payload: request.FeedbackStatusRequest,
     session: Session = Depends(get_db),
 ):
 
     _service = service.FeedbackService(session)
-    e, feedback = _service.feedback_by_message(
-        jwtData=request.state.jwtData, message_id=message_id, data=data
+    e, feedback = _service.change_feedback_status(
+        jwtData=request.state.jwtData,
+        feedbackID=feedback_id,
+        payload=payload,
     )
 
     if e:
