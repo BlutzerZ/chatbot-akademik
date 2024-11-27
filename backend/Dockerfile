@@ -28,6 +28,10 @@ COPY --chown=academicchat:academicchat . .
 # Use user "wagtail" to run the build commands below and the server itself.
 USER academicchat
 
+
+# Alembic
+RUN alembic upgrade head
+
 # Collect static files.
 # RUN python manage.py collectstatic --noinput --clear
 
