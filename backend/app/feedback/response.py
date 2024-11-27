@@ -6,6 +6,7 @@ from uuid import UUID
 from app.feedback import model
 from app.conversation.request import MessageDetail
 
+
 class FeedbackCorrectionDetail(BaseModel):
     id: UUID
     feedback_id: UUID
@@ -16,6 +17,7 @@ class FeedbackCorrectionDetail(BaseModel):
     class Config:
         from_attributes = True
         arbitrary_types_allowed = True
+
 
 class FeedbackDetailUser(BaseModel):
     id: UUID
@@ -30,6 +32,7 @@ class FeedbackDetailUser(BaseModel):
         from_attributes = True
         arbitrary_types_allowed = True
 
+
 # class FeedbackDetailAdmin(BaseModel):
 #     id: UUID
 #     user_message: MessageDetail
@@ -37,11 +40,11 @@ class FeedbackDetailUser(BaseModel):
 #     score: int
 #     content: str
 #     status: model.FeedbackStatus
-#     correction: Optional[FeedbackCorrectionDetail] 
+#     correction: Optional[FeedbackCorrectionDetail]
 #     created_at: datetime
 #     updated_at: datetime
 #     deleted_at: datetime | None
-    
+
 #     class Config:
 #         from_attributes = True
 #         arbitrary_types_allowed = True
@@ -54,7 +57,7 @@ class FeedbackDetailAdmin(BaseModel):
     score: int
     content: str
     status: model.FeedbackStatus
-    correction: Optional[FeedbackCorrectionDetail] 
+    correction: Optional[FeedbackCorrectionDetail]
     created_at: datetime
     updated_at: datetime
     deleted_at: datetime | None
@@ -74,6 +77,7 @@ class GetAllFeedbackResponse(BaseModel):
     code: int
     message: str
     data: list[FeedbackDetailAdmin]
+
 
 class FeedbackCorrectionResponse(BaseModel):
     code: int

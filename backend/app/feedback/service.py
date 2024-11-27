@@ -27,18 +27,21 @@ class FeedbackService:
                     )
                 # Deleted
                 if filterData.include_deleted:
-                    query = query.filter(
-                        model.Feedback.deleted_at.isnot(None)
-                    )
+                    query = query.filter(model.Feedback.deleted_at.isnot(None))
                 # Date
                 if filterData.start_date:
-                    query = query.filter(model.Feedback.created_at >= filterData.start_date)
+                    query = query.filter(
+                        model.Feedback.created_at >= filterData.start_date
+                    )
                 if filterData.end_date:
-                    query = query.filter(model.Feedback.created_at <= filterData.end_date)
+                    query = query.filter(
+                        model.Feedback.created_at <= filterData.end_date
+                    )
                 # order_by
                 field = (
                     getattr(model.Feedback, filterData.sort_by)
-                    if filterData.sort_by and hasattr(model.Feedback, filterData.sort_by)
+                    if filterData.sort_by
+                    and hasattr(model.Feedback, filterData.sort_by)
                     else model.Feedback.id
                 )
                 # sort
@@ -83,7 +86,7 @@ class FeedbackService:
         e, feedback = self.get_feedback_by_id(jwtData, feedback_id)
         if e:
             return e, None
-        
+
         return None, feedback.correction
 
     def change_feedback_status(
@@ -112,7 +115,6 @@ class FeedbackService:
                     self.session.refresh(feedback)
                     self.session.refresh(feedbackCorrection)
 
-
                 return None, feedback
 
             elif payload.status.lower() == "invalid":
@@ -122,7 +124,7 @@ class FeedbackService:
                     self.session.commit()
                 except Exception as e:
                     self.session.rollback()
-                    return e, None    
+                    return e, None
                 finally:
                     self.session.refresh(feedback)
                     if payload.delete:
@@ -139,9 +141,9 @@ class FeedbackService:
                 except Exception as e:
                     self.session.rollback()
                     return e, None
-                
+
             return None, feedback
-        
+
         else:
             return Exception("User Not Allowed"), None
 
@@ -162,7 +164,6 @@ class FeedbackService:
             return e, None
 
         return None, feedback.correction
-            
 
     def feedback_by_message(
         self, jwtData, message_id, data
@@ -181,7 +182,7 @@ class FeedbackService:
             feedback = (
                 self.session.query(model.Feedback)
                 .filter_by(bot_message_id=message.id)
-                .first() 
+                .first()
             )
         except Exception as e:
             return f"Error Find Data | {str(e)}", None
@@ -230,18 +231,13 @@ class FeedbackService:
             finally:
                 self.session.refresh(feedback)
 
-
         return None, feedback
 
-    def delete_by_id(
-        self,
-        jwtData,
-        feedbackID
-    ) -> list[Exception, model.Feedback]:
+    def delete_by_id(self, jwtData, feedbackID) -> list[Exception, model.Feedback]:
         e, feedback = self.get_feedback_by_id(jwtData, feedbackID)
         if e:
             return e, None
-        
+
         try:
             feedback.deleted_at = datetime.today()
             self.session.add(feedback)
@@ -251,5 +247,5 @@ class FeedbackService:
             return e, None
         finally:
             self.session.refresh(feedback)
-        
+
         return None, feedback

@@ -11,6 +11,7 @@ from uuid import UUID
 
 router = APIRouter()
 
+
 @router.put(
     "/messages/{message_id}/feedback",
     dependencies=[Depends(middleware.JWTBearer())],
@@ -48,6 +49,7 @@ async def feedback_to_message(
     return response.FeedbackMessageResponse(
         code=200, message="Loh valid", data=feedback
     )
+
 
 @router.get(
     "/feedbacks",
@@ -121,6 +123,7 @@ async def get_feedback_by_id(
         code=200, message="Loh valid", data=feedback
     )
 
+
 @router.put(
     "/feedbacks/{feedback_id}/status",
     dependencies=[Depends(middleware.JWTBearer())],
@@ -162,7 +165,6 @@ async def change_feedback_status(
     )
 
 
-
 @router.get(
     "/feedbacks/{feedback_id}/correction",
     dependencies=[Depends(middleware.JWTBearer())],
@@ -177,8 +179,7 @@ async def get_feedback_correction(
 
     _service = service.FeedbackService(session)
     e, feedbackCorrection = _service.get_feedback_correction_by_feedback_id(
-        jwtData=request.state.jwtData,
-        feedback_id=feedback_id
+        jwtData=request.state.jwtData, feedback_id=feedback_id
     )
 
     if e:
@@ -200,6 +201,7 @@ async def get_feedback_correction(
     return response.FeedbackCorrectionResponse(
         code=200, message="Loh valid", data=feedbackCorrection
     )
+
 
 @router.put(
     "/feedbacks/{feedback_id}/correction",

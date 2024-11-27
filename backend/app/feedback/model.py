@@ -37,7 +37,9 @@ class Feedback(Base):
     created_at = Column(DateTime, default=datetime.today())
     updated_at = Column(DateTime, default=datetime.today(), onupdate=datetime.today())
 
-    user_message = relationship("Message", foreign_keys=[user_message_id], uselist=False)
+    user_message = relationship(
+        "Message", foreign_keys=[user_message_id], uselist=False
+    )
     bot_message = relationship("Message", foreign_keys=[bot_message_id], uselist=False)
 
     correction = relationship("FeedbackCorrection", backref="feedback", uselist=False)

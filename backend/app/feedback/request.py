@@ -7,6 +7,7 @@ class FeedbackRequest(BaseModel):
     score: int
     content: str
 
+
 class FeedbackStatusRequest(BaseModel):
     status: Literal["invalid", "valid"]
     delete: Optional[bool] = False
