@@ -2,6 +2,8 @@ from sqlalchemy.orm import Session
 from app.conversation import request, response, model
 from password_generator import PasswordGenerator
 
+from helper.role import is_admin, is_user
+
 
 class ConversationService:
     def __init__(self, session: Session):
@@ -118,37 +120,34 @@ class ConversationService:
 
         return e, [newMessage, newAssistantMessage]
 
-    def get_message_by_id(self, jwtData, messageID, conversationID) -> model.Message:
-        e, conversation = self.get_conversation_by_id(jwtData, conversationID)
-
-        try:
-            message = (
-                self.session.query(model.Message)
-                .filter_by(
-                    id=messageID,
-                    conversation=conversation,
+    def get_message_by_id(self, jwtData, messageID) -> model.Message:
+        if is_admin(jwtData):
+            try:
+                message = (
+                    self.session.query(model.Message)
+                    .filter_by(
+                        id=messageID,
+                    )
+                    .first()
                 )
-                .first()
-            )
-        except Exception as e:
-            return e, []
-
-        return e, message
-
-    def get_message_by_ide(self, jwtData, messageID) -> model.Message:
-        try:
-            message = (
-                self.session.query(model.Message)
-                .join(
-                    model.Conversation,
-                    model.Message.conversation_id == model.Conversation.id,
+            except Exception as e:
+                return e, []
+        elif is_user(jwtData):
+            try:
+                message = (
+                    self.session.query(model.Message)
+                    .join(
+                        model.Conversation,
+                        model.Message.conversation_id == model.Conversation.id,
+                    )
+                    .filter(
+                        model.Message.id == messageID,
+                        model.Conversation.user_id == jwtData["id"],
+                    )
+                    .first()
                 )
-                .filter(
-                    model.Message.id == messageID,
-                    model.Conversation.user_id == jwtData["id"],
-                )
-                .first()
-            )
-            return None, message
-        except Exception as e:
-            return e, None
+                return None, message
+            except Exception as e:
+                return e, None
+        else:
+            return Exception("User Not Allowed"), None
