@@ -22,3 +22,7 @@ class FeedbackFiltersRequest(BaseModel):
     include_deleted: bool = False
     start_date: date | None = None
     end_date: date | None = None
+
+
+class FeedbackCorrectionRequst(BaseModel):
+    content: str

@@ -7,7 +7,11 @@ from app.feedback import model
 from app.conversation.request import MessageDetail
 
 class FeedbackCorrectionDetail(BaseModel):
+    id: UUID
+    feedback_id: UUID
     content: str
+    created_at: datetime
+    updated_at: datetime
 
     class Config:
         from_attributes = True
@@ -50,7 +54,7 @@ class FeedbackDetailAdmin(BaseModel):
     score: int
     content: str
     status: model.FeedbackStatus
-    # correction: Optional[FeedbackCorrectionDetail] 
+    correction: Optional[FeedbackCorrectionDetail] 
     created_at: datetime
     updated_at: datetime
     deleted_at: datetime | None
@@ -70,3 +74,8 @@ class GetAllFeedbackResponse(BaseModel):
     code: int
     message: str
     data: list[FeedbackDetailAdmin]
+
+class FeedbackCorrectionResponse(BaseModel):
+    code: int
+    message: str
+    data: FeedbackCorrectionDetail
