@@ -2,14 +2,14 @@
 
 import client from "./backend-client";
 
-export const fetchMessages = async (chatId: string) => {
-  const res = await client.GET(`/conversations/${chatId}/messages`, {
+export const fetchMessages = async (conversation_id: string) => {
+  const res = await client.GET(`/conversations/${conversation_id}/inquire`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
     params: {
       query: {
-        limit: 10,
+        conversation_id: conversation_id,
       },
     },
   });
@@ -24,7 +24,7 @@ export const fetchConversations = async () => {
     },
     params: {
       query: {
-        limit: 20,
+        limit: 30,
       },
     },
   });
