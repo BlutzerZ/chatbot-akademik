@@ -96,7 +96,7 @@ type PageParams = {
 //   },
 // ];
 
-export default function ChatPageLayout() {
+export default function ChatContent() {
   // const [dummyMessages, setDummyMessages] = React.useState<ChatMessage[]>(MESSAGES);
   const params = useParams<PageParams>();
   const chatId = params.slug[0];
@@ -115,7 +115,7 @@ export default function ChatPageLayout() {
     },
   });
   const conversations = conversationsData?.data?.data;
-  console.log(conversations);
+  console.log("conversations: ", conversations);
 
   //    FETCH MESSAGES
   const {
@@ -148,7 +148,7 @@ export default function ChatPageLayout() {
     }
 
     try {
-      const result = await client.POST(`/conversations/${chatId}/messages`, {
+      const result = await client.POST(`/conversations/${chatId}/inquire`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -163,7 +163,7 @@ export default function ChatPageLayout() {
       });
 
       if (!result.error) {
-        const newMessages = result.data.data;
+        const newMessages = result.data.data as Message[];
         // console.log("HELLO WORLD");
         // console.log(newMessages);
         newMessages.map((newMessage: Message) => {
