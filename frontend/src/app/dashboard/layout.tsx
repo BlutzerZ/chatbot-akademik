@@ -1,5 +1,6 @@
 "use client";
 
+import ToggleDrawer from "@/components/chat/ToggleDrawer";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -17,6 +18,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
           <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
 
           <div className="drawer-content h-screen overflow-x-hidden">
+            <ToggleDrawer/>
             <div className="h-full">{children}</div>
           </div>
 
