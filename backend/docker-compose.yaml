@@ -38,16 +38,16 @@ services:
       - ./static:/static
       - ./media:/media
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./webroot/.well-known/acme-challenge:/usr/share/nginx/html/.well-known/acme-challenge
+      - /etc/letsencrypt:/etc/letsencrypt
     ports:
       - "${NGINX_PORT}:${NGINX_PORT}"
+      - "443:443"
     environment:
       - PORT=${PORT}
       - NGINX_PORT=${NGINX_PORT}
       - NGINX_DOMAIN=${NGINX_DOMAIN}
     depends_on:
       - web
-
-
-
 volumes:
   postgres_data:
