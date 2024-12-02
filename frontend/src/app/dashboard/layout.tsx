@@ -18,7 +18,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
           <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
 
           <div className="drawer-content h-screen overflow-x-hidden">
-            <ToggleDrawer/>
+            <ToggleDrawer />
             <div className="h-full">{children}</div>
           </div>
 
