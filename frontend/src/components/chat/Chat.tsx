@@ -32,9 +32,9 @@ const Chat: FC<Props> = (props) => {
 
         {props.isMessagesLoading && (
           <>
-            <div className="w-24">
-              <span className="loading loading-ring loading-lg mx-auto"></span>
-              <h1>Loading messages...</h1>
+            <div className="flex h-full w-full flex-col justify-center gap-5">
+              <span className="text-primary loading loading-spinner loading-md mx-auto"></span>
+              <h1 className="text-center font-semibold">Memuat pesan...</h1>
             </div>
           </>
         )}

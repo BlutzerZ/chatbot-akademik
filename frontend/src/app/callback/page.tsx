@@ -1,5 +1,6 @@
 "use client";
 
+import Loading from "@/components/Loading";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
@@ -8,22 +9,37 @@ const CallbackPage: React.FC = () => {
   const access_token = searchParams.get("access_token");
   const router = useRouter();
 
-  localStorage.setItem("token", access_token as string);
-
-  console.log(access_token);
+  // console.log(access_token);
 
   useEffect(() => {
-    if (access_token) {
-      console.log("Access token:", access_token);
-      router.push("/chat/new");
-    }
+    const storeToken = async () => {
+      if (access_token) {
+        localStorage.setItem("token", access_token as string);
+        try {
+          const response = await fetch("/api/set-cookie", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ token: access_token }),
+          });
+
+          if (response.ok) {
+            console.log("Token stored successfully");
+            router.push("/chat/new");
+          } else {
+            console.error("Token not stored");
+          }
+        } catch (error) {
+          console.error("Token not stored ", error);
+        }
+      }
+    };
+
+    storeToken();
   }, [access_token, router]);
 
-  return (
-    <div className="">
-      <h1>Memproses Login...</h1>
-    </div>
-  );
+  return <Loading />;
 };
 
 export default CallbackPage;

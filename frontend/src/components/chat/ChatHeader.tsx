@@ -1,25 +1,39 @@
-import { useRouter } from "next/navigation";
+"use client";
+
 import Icon from "../Icon";
 import Logo from "../Logo";
 import ToggleTheme from "../ToggleTheme";
 import ToggleDrawer from "./ToggleDrawer";
 import NoSsr from "../NoSsr";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { deleteToken } from "@/app/action";
 
 export default function ChatHeader() {
   const router = useRouter();
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
-  // function handleLogout(){
-  //   localStorage.removeItem("token");
-  //   router.push("/")
-  // }
+  async function handleSignout() {
+    try {
+      deleteToken();
+      router.refresh();
+    } catch {
+      console.error("Error during sign out");
+      setIsRedirecting(false);
+    }
+  }
+
+  if (isRedirecting) {
+    return null;
+  }
 
   return (
     <div className="navbar w-full justify-between bg-base-100 px-5 py-5 md:pt-3">
       <div className="flex gap-5">
         <ToggleDrawer />
-        <Logo />
+        <Logo width={100} />
       </div>
-      <div className="flex gap-5">
+      <div className="mr-8 flex gap-5">
         <NoSsr>
           <ToggleTheme />
         </NoSsr>
@@ -29,10 +43,13 @@ export default function ChatHeader() {
           </div>
           <ul
             tabIndex={0}
-            className="menu dropdown-content z-[1] w-fit rounded-box bg-base-200 p-2 text-error shadow"
+            className="text-primary menu dropdown-content z-[1] w-fit rounded-box bg-base-300 p-2 shadow"
           >
             <li className="flex">
-              <button className="">
+              <button
+                onClick={handleSignout}
+                className="hover:bg-base-100 hover:text-error"
+              >
                 <Icon name="logout" />
                 Keluar
               </button>

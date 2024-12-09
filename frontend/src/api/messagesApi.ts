@@ -1,8 +1,11 @@
 "use client";
 
+import { Message } from "@/components/chat/types";
 import client from "./backend-client";
 
-export const fetchMessages = async (conversation_id: string) => {
+export const fetchMessages = async (
+  conversation_id: string,
+): Promise<{ data: Message[] }> => {
   const res = await client.GET(`/conversations/${conversation_id}/inquire`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
