@@ -115,7 +115,7 @@ export default function ChatContent() {
     },
   });
   const conversations = conversationsData?.data?.data;
-  console.log("conversations: ", conversations);
+  // console.log("conversations: ", conversations);
 
   //    FETCH MESSAGES
   const {
@@ -132,11 +132,11 @@ export default function ChatContent() {
     },
     enabled: chatId !== "new",
   });
-  const [messages, setMessages] = useState<Message[]>(messagesData?.data?.data);
+  const [messages, setMessages] = useState<Message[]>([]); // Initialize with an empty array
 
   useEffect(() => {
-    if (messagesData) {
-      setMessages(messagesData?.data?.data);
+    if (messagesData?.data) {
+      setMessages(messagesData.data.data);
     }
   }, [messagesData]);
 

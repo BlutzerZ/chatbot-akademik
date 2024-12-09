@@ -16,27 +16,29 @@ export default function SignInPage() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
+  const handleLogin: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
     setLoading(true);
 
     try {
-      const result = await client.POST("/auth/sign-in", {
-        body: {
-          username,
-          password,
+      const response = await fetch("api/login", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
         },
+        body: JSON.stringify({ username, password }),
       });
-      if (!result.error) {
-        const res = result.data;
-        const token = res.data.token;
-        localStorage.setItem("token", token);
 
+      if (response.ok) {
+        const result = await response.json();
+        const token = result.token;
+        localStorage.setItem("token", token);
         router.push("/chat/new");
       } else {
-        // TODO: Change this later
-        setError(JSON.stringify(result.error));
+        alert("lol");
+        setError("Username atau password salah");
       }
+
       setLoading(false);
     } catch {
       setLoading(false);
@@ -72,9 +74,9 @@ export default function SignInPage() {
         <title>Login - bngky.</title>
       </Head>
       <div className="flex min-h-screen w-full flex-col items-center justify-center gap-8">
-        <Logo />
+        <Logo width={150} />
         <div className="card w-3/5 sm:w-3/12">
-          <form className="flex flex-col gap-10" onSubmit={handleSubmit}>
+          <form className="flex flex-col gap-10" onSubmit={handleLogin}>
             <div className="space-y-2">
               <label className="form-control w-full">
                 <div className="label">
