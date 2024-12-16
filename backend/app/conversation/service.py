@@ -1,22 +1,55 @@
 from sqlalchemy.orm import Session
 from app.conversation import request, response, model
 from password_generator import PasswordGenerator
-
+import google.generativeai as genai
+import os
 from helper.role import is_admin, is_user
+
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+generation_config = {
+  "temperature": 1,
+  "top_p": 0.95,
+  "top_k": 64,
+  "max_output_tokens": 8192,
+  "response_mime_type": "text/plain",
+}
+
+modelAiConfig = genai.GenerativeModel(
+  model_name="gemini-1.5-flash",
+  generation_config=generation_config,
+)
 
 
 class ConversationService:
     def __init__(self, session: Session):
         self.session = session
 
+    def get_query_from_user_prompt(self, prompt):
+        chat_session = modelAiConfig.start_chat(
+            history=[
+            {
+                "role": "user",
+                "parts": [
+                
+                f"Anda adalah chatbot akademik Universitas Dian Nuswantoro yang melayani mahasiswa. Jawablah pertanyaan mahasiswa di bawah. Pertanyaan mahasiswa: {prompt}"
+
+                ],
+            }
+            ]
+        )
+        response = chat_session.send_message(prompt)
+        return response.text
+
     def generate_text_from_ai_model(
         self, message, conversation
     ) -> tuple[Exception, model.Message]:
         try:
-            staticAIResponse = "Loh Gak Bahaya Ta?"
+            # staticAIResponse = "Loh Gak Bahaya Ta?"
+            aiResponse = self.get_query_from_user_prompt(message).strip()
+
             newAssistantMessage = model.Message(
                 role=model.RoleEnum.assistant,
-                content=staticAIResponse,
+                content=aiResponse,
                 conversation_id=conversation.id,
             )
             self.session.add(newAssistantMessage)
