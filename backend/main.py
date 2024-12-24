@@ -7,6 +7,8 @@ from app.user.routes import router as UserRouter
 from app.conversation.routes import router as ConversationRouter
 from app.modelAI.routes import router as ModelRouter
 from app.feedback.routes import router as FeedbackRouter
+# from app.generation_log.routes import router as GenerationLogRouter
+
 from exceptions.handlers import (
     custom_http_exception_handler,
     validation_exception_handler,
@@ -33,6 +35,7 @@ app.include_router(UserRouter)
 app.include_router(ConversationRouter)
 app.include_router(ModelRouter)
 app.include_router(FeedbackRouter)
+# app.include_router(GenerationLogRouter)
 
 
 # Exceptions

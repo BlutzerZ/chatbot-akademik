@@ -1,6 +1,7 @@
 from datetime import datetime
 from enum import Enum
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+from typing import Any
 from sqlalchemy.dialects.postgresql import UUID
 
 
@@ -16,7 +17,7 @@ class GenerationStatusEnum(str, Enum):
     stopped = "STOPPED"
 
 
-class AssistantMessasgeDetail(BaseModel):
+class AssistantMessageDetail(BaseModel):
     id: UUID
     generation_status: GenerationStatusEnum
     generation_amount: int
@@ -26,6 +27,9 @@ class AssistantMessasgeDetail(BaseModel):
 
     class Config:
         arbitrary_types_allowed = True
+        # Menonaktifkan perlindungan namespace untuk field yang diawali dengan 'model_'
+        protected_namespaces = ()
+        from_attributes = True
 
 
 class MessageDetail(BaseModel):
@@ -54,3 +58,7 @@ class ConversationDetail(BaseModel):
 
 class CreateConversationOrMessageRequest(BaseModel):
     message: str
+
+
+class CreateOrUpdateLogRequest(BaseModel):
+    data: Any = Field(..., description="Payload containing any JSON structure")

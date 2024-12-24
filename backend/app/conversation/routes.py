@@ -232,3 +232,79 @@ async def get_message_by_id(
         )
 
     return response.GetMessageByIDResponse(code=200, message="Loh valid", data=message)
+
+
+@router.get(
+    "/messages/{message_id}/logs",
+    dependencies=[Depends(middleware.JWTBearer())],
+    response_model=response.GetLogResponse,
+    tags=["Conversation"],
+)
+async def get_message_logs(
+    request: Request,
+    message_id: UUID,
+    session: Session = Depends(get_db),
+):
+    """
+    Endpoint untuk mendapatkan log berdasarkan message_id tertentu.
+    """
+    _service = service.ConversationService(session)
+    e, log = _service.get_generation_logs(
+        jwt_data=request.state.jwtData, message_id=message_id
+    )
+
+    if e:
+        raise CustomHTTPException(
+            type_="/internal-server-error",
+            title="Internal Server Error at Service",
+            status=500,
+            detail=str(e),
+        )
+
+    if not log:
+        raise CustomHTTPException(
+            type_="/not-found",
+            title="Not Found",
+            status=404,
+            detail="Logs not found for the specified message ID",
+        )
+
+    return response.GetLogResponse(
+        id=log["id"], message_id=log["message_id"], data=log["data"]
+    )
+
+
+from fastapi import Body
+
+
+@router.put(
+    "/messages/{message_id}/logs",
+    dependencies=[Depends(middleware.JWTBearer())],
+    response_model=response.CreateOrUpdateLogResponse,
+    tags=["Conversation"],
+)
+async def update_message_log(
+    request: Request,
+    message_id: UUID,
+    log_data: dict = Body(...),  # Gunakan Body untuk menangkap request body
+    session: Session = Depends(get_db),
+):
+    """
+    Endpoint to create or update a log associated with a specific message.
+    """
+    _service = service.ConversationService(session)
+    e, log = _service.create_or_update_log(
+        jwt_data=request.state.jwtData, message_id=message_id, log_data=log_data
+    )
+
+    if e:
+        raise CustomHTTPException(
+            type_="/internal-server-error",
+            title="Internal Server Error at Service",
+            status=500,
+            detail=str(e),
+        )
+
+    return response.CreateOrUpdateLogResponse(
+        id=log["id"], message_id=log["message_id"], data=log["data"]
+    )
