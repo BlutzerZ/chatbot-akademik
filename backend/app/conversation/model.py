@@ -1,5 +1,6 @@
 from uuid_extensions import uuid7
 import enum
+from sqlalchemy.sql import func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy import Column, Enum, DateTime, Float, Integer, ForeignKey, String
@@ -13,8 +14,8 @@ class Conversation(Base):
     id = Column(
         UUID(as_uuid=True), primary_key=True, default=uuid7, unique=True, nullable=False
     )
-    created_at = Column(DateTime, default=datetime.today())
-    updated_at = Column(DateTime, default=datetime.today(), onupdate=datetime.today())
+    created_at = Column(DateTime, default=func.now())
+    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 
     messages = relationship("Message", backref="conversation")
     user_id = Column(UUID(as_uuid=True), ForeignKey("user.id"))
@@ -34,8 +35,8 @@ class Message(Base):
     )
     role = Column(Enum(RoleEnum), nullable=False)
     content = Column(String())
-    created_at = Column(DateTime, default=datetime.today())
-    updated_at = Column(DateTime, default=datetime.today(), onupdate=datetime.today())
+    created_at = Column(DateTime, default=func.now())
+    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 
     assistant_message = relationship(
         "AssistantMessage", backref="message", uselist=False

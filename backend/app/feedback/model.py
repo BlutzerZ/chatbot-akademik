@@ -7,6 +7,7 @@ from sqlalchemy import (
     String,
     Boolean,
 )
+from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import UUID
 from uuid_extensions import uuid7
@@ -34,8 +35,8 @@ class Feedback(Base):
         Enum(FeedbackStatus), default=FeedbackStatus.in_review, nullable=True
     )
     deleted_at = Column(DateTime)
-    created_at = Column(DateTime, default=datetime.today())
-    updated_at = Column(DateTime, default=datetime.today(), onupdate=datetime.today())
+    created_at = Column(DateTime, default=func.now())
+    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 
     user_message = relationship(
         "Message", foreign_keys=[user_message_id], uselist=False
@@ -52,7 +53,7 @@ class FeedbackCorrection(Base):
         UUID(as_uuid=True), primary_key=True, default=uuid7, unique=True, nullable=False
     )
     content = Column(String(), nullable=False)
-    created_at = Column(DateTime, default=datetime.today())
-    updated_at = Column(DateTime, default=datetime.today(), onupdate=datetime.today())
+    created_at = Column(DateTime, default=func.now())
+    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 
     feedback_id = Column(UUID(as_uuid=True), ForeignKey("feedback.id"), unique=True)

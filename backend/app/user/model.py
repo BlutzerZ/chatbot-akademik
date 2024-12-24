@@ -3,6 +3,7 @@ from uuid_extensions import uuid7
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy import Column, Enum, ForeignKey, String, DateTime, CHAR
 from datetime import datetime
+from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 from config.database import Base
 
@@ -16,8 +17,8 @@ class User(Base):
     username = Column(String(255), nullable=False)
     token = Column(String(255), nullable=False)
     deleted_at = Column(DateTime)
-    created_at = Column(DateTime, default=datetime.today())
-    updated_at = Column(DateTime, default=datetime.today(), onupdate=datetime.today())
+    created_at = Column(DateTime, default=func.now())
+    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 
     conversations = relationship("Conversation", backref="user")
     role = relationship("Role", uselist=False, backref="user")

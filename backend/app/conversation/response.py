@@ -3,6 +3,7 @@ from enum import Enum
 from typing import Union
 from pydantic import BaseModel
 from uuid import UUID
+from typing import Any
 
 
 class RoleEnum(str, Enum):
@@ -73,3 +74,21 @@ class GetMessageByIDResponse(BaseModel):
     code: int
     message: str
     data: MessageDetail
+
+
+class GetLogResponse(BaseModel):
+    id: UUID
+    message_id: UUID
+    data: Any
+
+    class Config:
+        from_attributes = True
+
+
+class CreateOrUpdateLogResponse(BaseModel):
+    id: UUID
+    message_id: UUID
+    data: Any
+
+    class Config:
+        from_attributes = True
