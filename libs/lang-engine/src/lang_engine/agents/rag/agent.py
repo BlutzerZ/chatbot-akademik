@@ -1,7 +1,6 @@
-from typing import List, Optional, Dict, Any
+from typing import Dict, Any
 
 from haystack import Pipeline
-from haystack.dataclasses import ChatMessage
 from haystack_integrations.document_stores.chroma import ChromaDocumentStore
 from haystack_integrations.components.retrievers.chroma import ChromaEmbeddingRetriever
 from haystack.components.embedders import SentenceTransformersTextEmbedder
@@ -14,7 +13,7 @@ from lang_engine.core.base import BaseAgent
 from .prompts import RAG_TEMPLATE
 
 
-class RAGAgent(BaseAgent):
+class RAGAgent(BaseAgent[Dict[str, Any]]):
     """Agent that uses RAG to generate responses based on a knowledge base"""
 
     def __init__(
@@ -59,9 +58,9 @@ class RAGAgent(BaseAgent):
 
     def generate_response(
         self,
-        message: str,
-        context: Dict[str, Any],
-        conversation_messages: Optional[List[ChatMessage]] = None,
+        message,
+        context,
+        conversation_messages=None,
     ) -> str:
         response = self.pipeline.run(
             {
