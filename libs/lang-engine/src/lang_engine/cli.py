@@ -1,11 +1,19 @@
 import argparse
 from typing import Any, Optional, Protocol
 import sys
+import os
+from pathlib import Path
+from dotenv import load_dotenv
 
 from lang_engine.agents.advisor.agent import AdvisorAgent
 from lang_engine.agents.advisor.context import AdvisorContext
 from lang_engine.agents.answerer.agent import AnswererAgent
 from lang_engine.agents.answerer.context import AnswererContext
+
+# Load .env file from current working directory
+env_path = Path(os.getcwd()) / ".env"
+if env_path.exists():
+    load_dotenv(env_path)
 
 
 class Agent(Protocol):
