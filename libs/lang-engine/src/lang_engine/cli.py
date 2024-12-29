@@ -2,6 +2,7 @@ import argparse
 from typing import Optional
 
 from lang_engine.agents.rag.agent import RAGAgent
+from lang_engine.agents.rag.context import RAGContext
 
 
 def main(persist_path: Optional[str] = None):
@@ -24,7 +25,7 @@ def main(persist_path: Optional[str] = None):
             # Generate response
             response = agent.generate_response(
                 message=user_input,
-                context={},  # Empty context for basic usage
+                context=RAGContext(),
             )
 
             print("\nAgent:", response)

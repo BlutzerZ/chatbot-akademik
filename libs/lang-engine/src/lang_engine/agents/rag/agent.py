@@ -1,4 +1,4 @@
-from typing import Dict, Any
+from typing import Any
 
 from haystack import Pipeline
 from haystack_integrations.document_stores.chroma import ChromaDocumentStore
@@ -11,9 +11,10 @@ from haystack.components.builders import PromptBuilder
 
 from lang_engine.core.base import BaseAgent
 from .prompts import RAG_TEMPLATE
+from .context import RAGContext
 
 
-class RAGAgent(BaseAgent[Dict[str, Any]]):
+class RAGAgent(BaseAgent[RAGContext]):
     """Agent that uses RAG to generate responses based on a knowledge base"""
 
     def __init__(

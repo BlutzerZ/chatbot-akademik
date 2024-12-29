@@ -1,14 +1,15 @@
 from abc import ABC, abstractmethod
-from typing import List, Optional, Dict, Any, Generic, TypeVar
+from typing import Optional, Generic, TypeVar
 
 from haystack import Pipeline
 from haystack.dataclasses import ChatMessage
 
-TContext = TypeVar('TContext')
+TContext = TypeVar("TContext")
+
 
 class BaseAgent(ABC, Generic[TContext]):
     """Base class for all chat agents
-    
+
     Type Parameters:
         TContext: The type of the context object used by this agent
     """
@@ -26,7 +27,7 @@ class BaseAgent(ABC, Generic[TContext]):
         self,
         message: str,
         context: TContext,
-        conversation_messages: Optional[List[ChatMessage]] = None,
+        conversation_messages: Optional[list[ChatMessage]] = None,
     ) -> str:
         """Generate a response given the latest message and context
 
