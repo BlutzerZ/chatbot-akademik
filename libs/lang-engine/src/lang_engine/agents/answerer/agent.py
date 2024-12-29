@@ -11,11 +11,11 @@ from haystack_integrations.components.generators.google_ai import (
 from haystack.components.builders import PromptBuilder
 
 from lang_engine.core.base import BaseAgent
-from .prompts import RAG_TEMPLATE
-from .context import RagContext
+from .prompts import ANSWERER_TEMPLATE
+from .context import AnswererContext
 
 
-class RagAgent(BaseAgent[RagContext]):
+class AnswererAgent(BaseAgent[AnswererContext]):
     """Agent that uses Retrieval Augmented Generation (RAG) to provide knowledge-based responses.
 
     This agent combines a document retriever with a language model to generate informed responses.
@@ -53,7 +53,7 @@ class RagAgent(BaseAgent[RagContext]):
         )
 
         retriever = ChromaEmbeddingRetriever(document_store=document_store)
-        prompt_builder = PromptBuilder(template=RAG_TEMPLATE)
+        prompt_builder = PromptBuilder(template=ANSWERER_TEMPLATE)
         generator = GoogleAIGeminiGenerator(model=self.llm_model)
 
         # Build pipeline
@@ -73,7 +73,7 @@ class RagAgent(BaseAgent[RagContext]):
     def generate_response(
         self,
         message: str,
-        context: RagContext,
+        context: AnswererContext,
         conversation_messages: Optional[list[ChatMessage]] = None,
     ) -> str:
         """Generate a response using RAG pipeline.

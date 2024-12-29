@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 
 @dataclass
-class RagContext:
+class AnswererContext:
     """Context for the Rag agent"""
 
     pass

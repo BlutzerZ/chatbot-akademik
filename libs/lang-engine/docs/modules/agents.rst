@@ -4,22 +4,22 @@ Agents
 Class Hierarchy
 --------------
 .. inheritance-diagram:: 
-   lang_engine.agents.rag.agent
-   lang_engine.agents.rag.context
+   lang_engine.agents.answerer.agent
+   lang_engine.agents.answerer.context
    lang_engine.agents.advisor.agent
    lang_engine.agents.advisor.context
    :parts: 1
    :private-bases:
    :caption: Agent Classes Inheritance Diagram
 
-RAG Agent
+Answerer Agent
 ---------
-.. automodule:: lang_engine.agents.rag.agent
+.. automodule:: lang_engine.agents.answerer.agent
    :members:
    :undoc-members:
    :show-inheritance:
 
-.. automodule:: lang_engine.agents.rag.context
+.. automodule:: lang_engine.agents.answerer.context
    :members:
    :undoc-members:
    :show-inheritance:

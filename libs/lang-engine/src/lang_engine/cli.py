@@ -4,8 +4,8 @@ import sys
 
 from lang_engine.agents.advisor.agent import AdvisorAgent
 from lang_engine.agents.advisor.context import AdvisorContext
-from lang_engine.agents.rag.agent import RagAgent
-from lang_engine.agents.rag.context import RagContext
+from lang_engine.agents.answerer.agent import AnswererAgent
+from lang_engine.agents.answerer.context import AnswererContext
 
 
 class Agent(Protocol):
@@ -79,7 +79,7 @@ def create_agent(
 ) -> tuple[Agent, Any]:
     """Create and return appropriate agent and context based on type."""
     if agent_type == "rag":
-        return RagAgent(persist_path=persist_path or "./chroma"), RagContext()
+        return AnswererAgent(persist_path=persist_path or "./chroma"), AnswererContext()
     elif agent_type == "advisor":
         return AdvisorAgent(), setup_advisor_context()
     else:

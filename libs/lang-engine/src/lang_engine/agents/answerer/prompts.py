@@ -1,4 +1,4 @@
-RAG_TEMPLATE = """
+ANSWERER_TEMPLATE = """
 Anda adalah chatbot akademik Universitas Dian Nuswantoro yang melayani mahasiswa.
 Jawablah pertanyaan mahasiswa di bawah.
 
