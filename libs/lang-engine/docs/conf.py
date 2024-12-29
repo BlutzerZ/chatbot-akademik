@@ -16,6 +16,7 @@ extensions = [
     "sphinx.ext.githubpages",
     "sphinx.ext.graphviz",
     "sphinx.ext.inheritance_diagram",
+    "sphinx.ext.autosummary",
 ]
 
 # Add any paths that contain templates here
@@ -28,3 +29,6 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 html_theme = "sphinx_rtd_theme"
 
 graphviz_output_format = "svg"
+
+# Add autosummary configuration
+autosummary_generate = True
