@@ -1,11 +1,15 @@
 import argparse
-from typing import Optional
+from typing import Optional, Protocol
 import sys
 
 from lang_engine.agents.advisor.agent import AdvisorAgent
 from lang_engine.agents.advisor.context import AdvisorContext
 from lang_engine.agents.rag.agent import RagAgent
 from lang_engine.agents.rag.context import RagContext
+
+
+class Agent(Protocol):
+    def generate_response(self, message: str, context: any) -> str: ...
 
 
 def get_multiline_input(prompt: str) -> str:
@@ -21,30 +25,35 @@ def get_multiline_input(prompt: str) -> str:
     return "\n".join(lines)
 
 
-def run_advisor_agent():
-    """Run the advisor agent CLI"""
-    print("\nAdvisor Agent Setup")
-    print("-" * 50)
-
-    # Get context information
-    transcript = get_multiline_input("\nEnter student transcript (courses and grades):")
-    available_courses = get_multiline_input("\nEnter available courses:")
-
+def get_gpa_input() -> float:
+    """Get and validate GPA input from user."""
     while True:
         try:
             gpa = float(input("\nEnter student GPA: ").strip())
             if 0 <= gpa <= 4.0:
-                break
+                return gpa
             print("GPA must be between 0 and 4.0")
         except ValueError:
             print("Please enter a valid number")
 
-    agent = AdvisorAgent()
-    context = AdvisorContext(
+
+def setup_advisor_context() -> AdvisorContext:
+    """Setup and return AdvisorContext with user inputs."""
+    print("\nAdvisor Agent Setup")
+    print("-" * 50)
+
+    transcript = get_multiline_input("\nEnter student transcript (courses and grades):")
+    available_courses = get_multiline_input("\nEnter available courses:")
+    gpa = get_gpa_input()
+
+    return AdvisorContext(
         student_transcript=transcript, available_courses=available_courses, gpa=gpa
     )
 
-    print("\nAdvisor Agent Ready!")
+
+def run_agent_loop(agent: Agent, context: any):
+    """Generic agent interaction loop."""
+    print("\nAgent Ready!")
     print("-" * 50)
 
     try:
@@ -65,41 +74,23 @@ def run_advisor_agent():
         print(f"\nError: {str(e)}")
 
 
-def run_rag_agent(persist_path: str):
-    """Run the RAG agent CLI"""
-    agent = RagAgent(persist_path=persist_path)
-
-    print("\nRAG Agent Ready!")
-    print("-" * 50)
-
-    try:
-        while True:
-            user_input = input("\nYou: ").strip()
-            if not user_input:
-                continue
-
-            response = agent.generate_response(
-                message=user_input,
-                context=RagContext(),
-            )
-            print("\nAgent:", response)
-
-    except KeyboardInterrupt:
-        print("\n\nGoodbye!")
-    except Exception as e:
-        print(f"\nError: {str(e)}")
+def create_agent(
+    agent_type: str, persist_path: Optional[str] = None
+) -> tuple[Agent, any]:
+    """Create and return appropriate agent and context based on type."""
+    if agent_type == "rag":
+        return RagAgent(persist_path=persist_path or "./chroma"), RagContext()
+    elif agent_type == "advisor":
+        return AdvisorAgent(), setup_advisor_context()
+    else:
+        print(f"Unknown agent type: {agent_type}")
+        sys.exit(1)
 
 
 def main(agent_type: str, persist_path: Optional[str] = None):
     print(f"\n{agent_type.upper()} Agent CLI (Press Ctrl+C to exit)")
-
-    if agent_type == "rag":
-        run_rag_agent(persist_path or "./chroma")
-    elif agent_type == "advisor":
-        run_advisor_agent()
-    else:
-        print(f"Unknown agent type: {agent_type}")
-        sys.exit(1)
+    agent, context = create_agent(agent_type, persist_path)
+    run_agent_loop(agent, context)
 
 
 def run_cli():
