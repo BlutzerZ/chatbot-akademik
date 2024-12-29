@@ -1,0 +1,79 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "lang-engine"
+dynamic = ["version"]
+description = ''
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+keywords = []
+authors = [
+  { name = "Lutfi Azis Hafiizhudin", email = "17lutfi21@gmail.com" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = [
+  "chroma-haystack>=1.0.0",
+  "chromadb>=0.5.23",
+  "google-ai-haystack>=3.0.2",
+  "google-generativeai>=0.8.3",
+  "haystack-ai>=2.8.0",
+  "haystack-experimental>=0.3.0",
+  "huggingface-hub>=0.26.5",
+  "sentence_transformers>=3.3.1",
+  "transformers>=4.46.3",
+]
+
+[project.urls]
+Documentation = "https://github.com/Lutfi Azis Hafiizhudin/lang-engine#readme"
+Issues = "https://github.com/Lutfi Azis Hafiizhudin/lang-engine/issues"
+Source = "https://github.com/Lutfi Azis Hafiizhudin/lang-engine"
+
+[tool.hatch.version]
+path = "src/lang_engine/__about__.py"
+
+[tool.hatch.envs.types]
+extra-dependencies = [
+  "mypy>=1.0.0",
+]
+[tool.hatch.envs.types.scripts]
+check = "mypy --install-types --non-interactive {args:src/lang_engine tests}"
+
+[tool.coverage.run]
+source_pkgs = ["lang_engine", "tests"]
+branch = true
+parallel = true
+omit = [
+  "src/lang_engine/__about__.py",
+]
+
+[tool.coverage.paths]
+lang_engine = ["src/lang_engine", "*/lang-engine/src/lang_engine"]
+tests = ["tests", "*/lang-engine/tests"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
+
+[tool.mypy]
+ignore_missing_imports = true
+exclude = [
+    "haystack.*",
+    "haystack_ai.*",
+    "haystack_experimental.*"
+]
