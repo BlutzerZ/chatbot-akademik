@@ -72,7 +72,10 @@ prompt_builder = ChatPromptBuilder(
 )
 
 # %%
-from haystack_integrations.components.generators.google_ai import GoogleAIGeminiGenerator, GoogleAIGeminiChatGenerator
+from haystack_integrations.components.generators.google_ai import (
+    GoogleAIGeminiGenerator,
+    GoogleAIGeminiChatGenerator,
+)
 
 generator = GoogleAIGeminiGenerator(model="gemini-1.5-flash")
 
@@ -165,10 +168,9 @@ def print_pipeline_response(response, question):
     print(response["chat"]["replies"][0].content)
     print()
 
+
 # %%
 response = get_pipeline_response(pipeline, "Boleh minta tolong memilih SKS?")
 
 # %%
 print_pipeline_response(response, "Boleh minta tolong memilih SKS?")
-
-

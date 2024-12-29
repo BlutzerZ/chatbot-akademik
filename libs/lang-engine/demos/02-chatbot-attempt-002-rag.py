@@ -50,7 +50,9 @@ Jawaban:
 prompt_builder = PromptBuilder(template=template)
 
 # %%
-from haystack_integrations.components.generators.google_ai import GoogleAIGeminiGenerator
+from haystack_integrations.components.generators.google_ai import (
+    GoogleAIGeminiGenerator,
+)
 
 generator = GoogleAIGeminiGenerator(model="gemini-1.5-flash")
 
@@ -76,6 +78,7 @@ if SHOW_MERMAID_TEXT:
 else:
     pipeline.show()
 
+
 # %%
 def get_pipeline_response(pipeline: Pipeline, question: str):
     response = pipeline.run(
@@ -84,6 +87,7 @@ def get_pipeline_response(pipeline: Pipeline, question: str):
     )
 
     return response
+
 
 def print_pipeline_response(response, question):
     print("# Question")
@@ -99,6 +103,7 @@ def print_pipeline_response(response, question):
     print(response["llm"]["replies"][0])
     print()
 
+
 # %%
 questions = [
     # "Apa aktivitas yang berkaitan dengan seni di panggung?"
@@ -109,5 +114,3 @@ response = get_pipeline_response(pipeline, questions[0])
 
 # %%
 print_pipeline_response(response, question)
-
-

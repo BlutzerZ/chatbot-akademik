@@ -31,7 +31,6 @@ document_store = ChromaDocumentStore(
 retriever = ChromaEmbeddingRetriever(document_store=document_store)
 
 
-
 # %%
 # Emotion
 from enum import StrEnum
@@ -55,6 +54,7 @@ class EmotionClassfier:
         return {
             "emotion": Emotion.NEUTRAL,
         }
+
 
 # %%
 # advisor prompt builder
@@ -84,7 +84,9 @@ Pertanyaan mahasiswa: {{question}}
     ]
 )
 
-from haystack_integrations.components.generators.google_ai import GoogleAIGeminiChatGenerator
+from haystack_integrations.components.generators.google_ai import (
+    GoogleAIGeminiChatGenerator,
+)
 
 chat_generator = GoogleAIGeminiChatGenerator(model="gemini-1.5-flash")
 
@@ -135,5 +137,3 @@ print(response["advisor_prompt_builder"]["prompt"][0].content)
 print()
 print("RESPONSE: ")
 print(response["advisor_prompt_builder"]["prompt"][0].content)
-
-
