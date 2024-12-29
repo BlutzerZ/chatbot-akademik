@@ -17,7 +17,7 @@ from .context import RagContext
 
 class RagAgent(BaseAgent[RagContext]):
     """Agent that uses Retrieval Augmented Generation (RAG) to provide knowledge-based responses.
-    
+
     This agent combines a document retriever with a language model to generate informed responses.
     It first retrieves relevant documents from a knowledge base using semantic search, then uses
     these documents as context for the language model to generate accurate responses.
@@ -25,7 +25,7 @@ class RagAgent(BaseAgent[RagContext]):
     Args:
         persist_path (str): Path where the Chroma vector database will be stored. Defaults to "./chroma"
         collection_name (str): Name of the Chroma collection to use. Defaults to "knowledge-general-001"
-        embedding_model (str): Name/path of the sentence transformer model for embeddings. 
+        embedding_model (str): Name/path of the sentence transformer model for embeddings.
             Defaults to "LazarusNLP/all-indo-e5-small-v4"
         llm_model (str): Name of the Google AI model to use. Defaults to "gemini-1.5-flash"
     """
@@ -77,12 +77,12 @@ class RagAgent(BaseAgent[RagContext]):
         conversation_messages: Optional[list[ChatMessage]] = None,
     ) -> str:
         """Generate a response using RAG pipeline.
-        
+
         Args:
             message: The user's input message to respond to
             context: RAG-specific context information
             conversation_messages: Previous conversation history (not used in current implementation)
-            
+
         Returns:
             str: Generated response based on retrieved knowledge
         """

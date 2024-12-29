@@ -8,33 +8,28 @@ TContext = TypeVar("TContext")
 
 
 class BaseAgent(ABC, Generic[TContext]):
-    """Base class for all conversational agents in the system.
-    
-    This abstract class defines the core interface that all agents must implement.
-    It provides a structured way to build agents that use Haystack pipelines for
-    natural language processing tasks.
+    """Base class for all agents in the Lang Engine.
 
-    Each agent implementation should:
-    1. Define its specific context type (TContext)
-    2. Implement the pipeline building logic in _build_pipeline()
-    3. Implement the response generation logic in generate_response()
+    This class provides the basic structure and interface that all agents
+    should implement.
 
-    The class uses a generic type parameter TContext to ensure type safety when
-    working with different types of context objects for different agents.
-
-    Type Parameters:
-        TContext: The type of context object used by this agent. Different agents
-                 may require different types of context information.
+    Attributes:
+        name (str): The name of the agent
     """
 
-    def __init__(self):
-        """Initialize the agent by building its pipeline."""
+    def __init__(self, name: str):
+        """Initialize the base agent.
+
+        Args:
+            name (str): The name to give to this agent instance
+        """
+        self.name = name
         self.pipeline = self._build_pipeline()
 
     @abstractmethod
     def _build_pipeline(self) -> Pipeline:
         """Build and return the Haystack pipeline for this agent.
-        
+
         This method should be implemented by each agent to define its specific
         pipeline architecture using Haystack components.
 

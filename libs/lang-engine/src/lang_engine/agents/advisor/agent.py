@@ -15,7 +15,7 @@ from .prompts import ADVISOR_TEMPLATE
 
 class AdvisorAgent(BaseAgent[AdvisorContext]):
     """Academic advisor agent that helps students make course selections.
-    
+
     This agent analyzes a student's academic history (transcript), GPA, and available courses
     to provide personalized course recommendations. It considers prerequisites, academic performance,
     and course availability to suggest suitable academic paths.
@@ -76,12 +76,12 @@ class AdvisorAgent(BaseAgent[AdvisorContext]):
         conversation_messages: Optional[list[ChatMessage]] = None,
     ) -> str:
         """Generate academic advice based on student context.
-        
+
         Args:
             message: Student's question or request for advice
             context: Student's academic context including transcript, GPA, and available courses
             conversation_messages: Previous conversation history (not used in current implementation)
-            
+
         Returns:
             str: Generated academic advice or course recommendations
         """
