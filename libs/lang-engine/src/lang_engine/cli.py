@@ -76,10 +76,9 @@ def run_agent_loop(agent: Agent, context: Any):
         print(f"\nError: {str(e)}")
 
 
-def create_agent(agent_type: str) -> tuple[Agent, Any]:
+def create_agent(agent_type: str, persist_path: str) -> tuple[Agent, Any]:
     """Create and return appropriate agent and context based on type."""
     if agent_type == "rag":
-        persist_path = settings.CHROMA_PERSIST_PATH
         return AnswererAgent(persist_path=persist_path), AnswererContext()
     elif agent_type == "advisor":
         return AdvisorAgent(), setup_advisor_context()
@@ -88,9 +87,9 @@ def create_agent(agent_type: str) -> tuple[Agent, Any]:
         sys.exit(1)
 
 
-def main(agent_type: str, persist_path: str | Path = settings.CHROMA_PERSIST_PATH):
+def main(agent_type: str, persist_path: str = str(settings.CHROMA_PERSIST_PATH)):
     print(f"\n{agent_type.upper()} Agent CLI (Press Ctrl+C to exit)")
-    agent, context = create_agent(agent_type)
+    agent, context = create_agent(agent_type, persist_path)
     run_agent_loop(agent, context)
 
 
