@@ -11,11 +11,11 @@ from haystack.components.builders import PromptBuilder
 
 from lang_engine.core.base import BaseAgent
 from .prompts import RAG_TEMPLATE
-from .context import RAGContext
+from .context import RagContext
 
 
-class RAGAgent(BaseAgent[RAGContext]):
-    """Agent that uses RAG to generate responses based on a knowledge base"""
+class RagAgent(BaseAgent[RagContext]):
+    """Agent that uses Rag to generate responses based on a knowledge base"""
 
     def __init__(
         self,
