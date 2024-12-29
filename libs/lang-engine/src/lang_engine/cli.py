@@ -9,7 +9,7 @@ from lang_engine.agents.rag.context import RagContext
 
 
 class Agent(Protocol):
-    def generate_response(self, message: str, context: any) -> str: ...
+    def generate_response(self, message: str, context: Any) -> str: ...
 
 
 def get_multiline_input(prompt: str) -> str:
@@ -51,7 +51,7 @@ def setup_advisor_context() -> AdvisorContext:
     )
 
 
-def run_agent_loop(agent: Agent, context: any):
+def run_agent_loop(agent: Agent, context: Any):
     """Generic agent interaction loop."""
     print("\nAgent Ready!")
     print("-" * 50)
