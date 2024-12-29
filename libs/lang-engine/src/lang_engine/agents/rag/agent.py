@@ -23,11 +23,11 @@ class RagAgent(BaseAgent[RagContext]):
     these documents as context for the language model to generate accurate responses.
 
     Args:
-        persist_path (str): Path where the Chroma vector database will be stored. Defaults to "./chroma"
-        collection_name (str): Name of the Chroma collection to use. Defaults to "knowledge-general-001"
-        embedding_model (str): Name/path of the sentence transformer model for embeddings.
+        persist_path: Path where the Chroma vector database will be stored. Defaults to "./chroma"
+        collection_name: Name of the Chroma collection to use. Defaults to "knowledge-general-001"
+        embedding_model: Name/path of the sentence transformer model for embeddings.
             Defaults to "LazarusNLP/all-indo-e5-small-v4"
-        llm_model (str): Name of the Google AI model to use. Defaults to "gemini-1.5-flash"
+        llm_model: Name of the Google AI model to use. Defaults to "gemini-1.5-flash"
     """
 
     def __init__(

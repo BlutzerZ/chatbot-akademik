@@ -21,7 +21,7 @@ class AdvisorAgent(BaseAgent[AdvisorContext]):
     and course availability to suggest suitable academic paths.
 
     Args:
-        llm_model (str): Name of the Google AI model to use. Defaults to "gemini-1.5-flash"
+        llm_model: Name of the Google AI model to use. Defaults to "gemini-1.5-flash"
     """
 
     def __init__(
