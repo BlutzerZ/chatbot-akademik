@@ -1,5 +1,5 @@
 import argparse
-from typing import Optional, Protocol
+from typing import Any, Optional, Protocol
 import sys
 
 from lang_engine.agents.advisor.agent import AdvisorAgent
@@ -76,7 +76,7 @@ def run_agent_loop(agent: Agent, context: any):
 
 def create_agent(
     agent_type: str, persist_path: Optional[str] = None
-) -> tuple[Agent, any]:
+) -> tuple[Agent, Any]:
     """Create and return appropriate agent and context based on type."""
     if agent_type == "rag":
         return RagAgent(persist_path=persist_path or "./chroma"), RagContext()
