@@ -14,6 +14,8 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
     "sphinx.ext.githubpages",
+    'sphinx.ext.graphviz',
+    'sphinx.ext.inheritance_diagram',
 ]
 
 # Add any paths that contain templates here
@@ -24,3 +26,5 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 # The theme to use for HTML and HTML Help pages
 html_theme = "sphinx_rtd_theme"
+
+graphviz_output_format = 'svg'

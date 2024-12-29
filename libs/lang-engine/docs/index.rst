@@ -1,5 +1,5 @@
 Welcome to Lang Engine's documentation!
-=====================================
+=======================================
 
 .. toctree::
    :maxdepth: 2
@@ -7,7 +7,6 @@ Welcome to Lang Engine's documentation!
 
    modules/agents
    modules/core
-   api
 
 Indices and tables
 ==================
