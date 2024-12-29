@@ -1,19 +1,13 @@
 import argparse
-from typing import Any, Optional, Protocol
-import sys
-import os
 from pathlib import Path
-from dotenv import load_dotenv
+from typing import Any, Protocol
+import sys
+from lang_engine.config import settings
 
 from lang_engine.agents.advisor.agent import AdvisorAgent
 from lang_engine.agents.advisor.context import AdvisorContext
 from lang_engine.agents.answerer.agent import AnswererAgent
 from lang_engine.agents.answerer.context import AnswererContext
-
-# Load .env file from current working directory
-env_path = Path(os.getcwd()) / ".env"
-if env_path.exists():
-    load_dotenv(env_path)
 
 
 class Agent(Protocol):
@@ -82,12 +76,11 @@ def run_agent_loop(agent: Agent, context: Any):
         print(f"\nError: {str(e)}")
 
 
-def create_agent(
-    agent_type: str, persist_path: Optional[str] = None
-) -> tuple[Agent, Any]:
+def create_agent(agent_type: str) -> tuple[Agent, Any]:
     """Create and return appropriate agent and context based on type."""
     if agent_type == "rag":
-        return AnswererAgent(persist_path=persist_path or "./chroma"), AnswererContext()
+        persist_path = settings.CHROMA_PERSIST_PATH
+        return AnswererAgent(persist_path=persist_path), AnswererContext()
     elif agent_type == "advisor":
         return AdvisorAgent(), setup_advisor_context()
     else:
@@ -95,9 +88,9 @@ def create_agent(
         sys.exit(1)
 
 
-def main(agent_type: str, persist_path: Optional[str] = None):
+def main(agent_type: str, persist_path: str | Path = settings.CHROMA_PERSIST_PATH):
     print(f"\n{agent_type.upper()} Agent CLI (Press Ctrl+C to exit)")
-    agent, context = create_agent(agent_type, persist_path)
+    agent, context = create_agent(agent_type)
     run_agent_loop(agent, context)
 
 

@@ -10,6 +10,7 @@ from haystack_integrations.components.generators.google_ai import (
 )
 from haystack.components.builders import PromptBuilder
 
+from lang_engine.config import settings
 from lang_engine.core.base import BaseAgent
 from .prompts import ANSWERER_TEMPLATE
 from .context import AnswererContext
