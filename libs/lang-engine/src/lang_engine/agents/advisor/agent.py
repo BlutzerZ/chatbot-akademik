@@ -14,7 +14,15 @@ from .prompts import ADVISOR_TEMPLATE
 
 
 class AdvisorAgent(BaseAgent[AdvisorContext]):
-    """Agent that helps students choose courses based on their transcript"""
+    """Academic advisor agent that helps students make course selections.
+    
+    This agent analyzes a student's academic history (transcript), GPA, and available courses
+    to provide personalized course recommendations. It considers prerequisites, academic performance,
+    and course availability to suggest suitable academic paths.
+
+    Args:
+        llm_model (str): Name of the Google AI model to use. Defaults to "gemini-1.5-flash"
+    """
 
     def __init__(
         self,
@@ -67,6 +75,16 @@ class AdvisorAgent(BaseAgent[AdvisorContext]):
         context: AdvisorContext,
         conversation_messages: Optional[list[ChatMessage]] = None,
     ) -> str:
+        """Generate academic advice based on student context.
+        
+        Args:
+            message: Student's question or request for advice
+            context: Student's academic context including transcript, GPA, and available courses
+            conversation_messages: Previous conversation history (not used in current implementation)
+            
+        Returns:
+            str: Generated academic advice or course recommendations
+        """
         response = self.pipeline.run(
             {
                 "question_joiner": {"value": message},
