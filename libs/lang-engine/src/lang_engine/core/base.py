@@ -12,18 +12,10 @@ class BaseAgent(ABC, Generic[TContext]):
 
     This class provides the basic structure and interface that all agents
     should implement.
-
-    Attributes:
-        name (str): The name of the agent
     """
 
-    def __init__(self, name: str):
-        """Initialize the base agent.
-
-        Args:
-            name (str): The name to give to this agent instance
-        """
-        self.name = name
+    def __init__(self):
+        """Initialize the base agent."""
         self.pipeline = self._build_pipeline()
 
     @abstractmethod
