@@ -4,9 +4,11 @@ on:
   push:
     paths:
       - 'backend/**'
+      - 'libs/**'
   pull_request:
     paths:
       - 'backend/**'
+      - 'libs/**'
 
 jobs:
   format-check:
