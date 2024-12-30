@@ -1,5 +1,10 @@
 # lang_engine
 
+Do the following in this order
+1. Set up environment variables
+2. Set up development
+3. Building the docs
+
 ## Set up chroma directory
 
 1. Ask Lutfi for the chroma db directory.
