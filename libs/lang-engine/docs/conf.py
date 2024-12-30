@@ -1,8 +1,12 @@
 # Configuration file for the Sphinx documentation builder.
+import builtins
 import os
 import sys
 
 sys.path.insert(0, os.path.abspath(".."))
+
+# Provides an easy way to check for lang_engine to check if it's being run to build docs.
+builtins.__sphinx_build__ = True # type: ignore
 
 project = "Lang Engine"
 copyright = "2024"
