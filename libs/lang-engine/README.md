@@ -7,8 +7,9 @@ Do the following in this order
 
 ## Set up chroma directory
 
-1. Ask Lutfi for the chroma db directory.
-2. Put it at `/libs/lang-engine/chroma`
+1. Get the chroma data from this [Google drive file](https://drive.google.com/file/d/1TaKowIBb4kvHPMJvaCbn37F_CnAzPpD5/view?usp=drive_link).
+2. Extract the contents in `/libs/lang-engine/`.
+3. When everything is done correctly, the sqlite3 file should be in `libs/lang-engine/chroma/chroma.sqlite3`.
 
 ## Set up environment variables
 
