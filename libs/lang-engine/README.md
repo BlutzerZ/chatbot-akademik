@@ -1,5 +1,10 @@
 # lang_engine
 
+## Set up chroma directory
+
+1. Ask Lutfi for the chroma db directory.
+2. Put it at `/libs/lang-engine/chroma`
+
 ## Set up environment variables
 
 If you want to run the cli for lang_engine, you need to set up the environment variables.
@@ -8,7 +13,9 @@ Copy `.env.example` to a new file `.env`. Then fill `.env` appropriately.
 
 ## Set up development
 
-Make sure you've filled the `.env` file first.
+Make sure you've
+- filled the `.env` file,
+- and have setup the chroma directory.
 
 ```bash
 # Make sure you're in the `/libs/lang-engine` directory.
