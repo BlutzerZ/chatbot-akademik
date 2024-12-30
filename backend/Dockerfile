@@ -1,6 +1,8 @@
 # Use an official Python runtime based on Debian 10 "buster" as a parent image.
 FROM python:3.12
 
+WORKDIR /bengky/backend
+
 # Add user that will be used in the container.
 RUN useradd academicchat
 
@@ -11,19 +13,20 @@ RUN useradd academicchat
 ENV PYTHONUNBUFFERED=1 
 
 # Install the project requirements.
-COPY requirements.txt /
-RUN pip install -r /requirements.txt
-
-# Use /app folder as a directory where the source code is stored.
-WORKDIR /app
+COPY requirements.txt requirements.txt
+RUN pip install --no-cache-dir -r /requirements.txt
 
 # Set this directory to be owned by the "wagtail" user. This Wagtail project
 # uses SQLite, the folder needs to be owned by the user that
 # will be writing to the database file.
-RUN chown academicchat:academicchat /app
+RUN chown academicchat:academicchat /bengky/backend
 
 # Copy the source code of the project into the container.
 COPY --chown=academicchat:academicchat . .
+
+COPY --from=bengky/libs /libs ../libs
+COPY requirements-local.txt requirements-local.txt
+RUN pip install --no-cache-dir -r requirements-local.txt
 
 # Use user "wagtail" to run the build commands below and the server itself.
 USER academicchat
