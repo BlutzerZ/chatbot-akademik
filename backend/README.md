@@ -1,88 +1,59 @@
-
 # Academic Chatbot API
 
-This Project about using AI chabot to help student to learn about university or other 
-
+This Project about using AI chabot to help student to learn about university or other
 
 ## API Reference
 
 Documentation about api can be provided by accesing url
-``` 
-http://localhost/docs 
+
+```
+http://localhost/docs
 ```
 
+## Running the Backend
 
-## Installation
+### Locally
 
 Install Academic Chatbot with virtualenv python
 
 ```bash
-  python -m venv venv
-  source 'venv\Scripts\activate' 
+python -m venv venv
+source 
+source 'venv\Script'venv\Scripts\activate'
 ```
 
-Instal Requirements library
+Install dependencies
 
 ```
 pip install -r requirements.txt
+pip install -r requirements-local.txt
 ```
 
-Rename or copy example.env to .env
-```
-DB_USER= #database username
-DB_PASSWORD= #database password
-DB_NAME= #database name
-DB_HOST= #database host
-DB_PORT= #database port
+Copy `.env.example` to `.env` and fill the variables appropriately.
 
-PORT= #webiste port
-
-JWT_SECRET_KEY= #jwt secret
-JWT_ALGORITHM= #algorithm
-```
-
-
-### Migrating 
-
-```
-alembic revision -m "initial"
-alembic upgrade head
-```
-
-
-### How to run
-
-For development
-```
+```bash
+# For development
 fastapi dev main.py
-```
 
-For production
-```
+# For production
 fastapi run main.py
 ```
-## Running On Docker
 
-To run this project on docker container
+### Using Docker
 
+Make sure the `DB_HOST` in `.env` is the same as the database's container name.
 
-### Setup .env
-change db_host with container name
-```
-DB_USER= #database username
-DB_PASSWORD= #database password
-DB_NAME= #database name
-DB_HOST= #database host -------> Change this with database container name
-DB_PORT= #database port
+`cd` to `/libs`.
 
-PORT= #webiste port
-
-JWT_SECRET_KEY= #jwt secret
-JWT_ALGORITHM= #algorithm
-```
-
-### Build with docker compose
-```
+```bash
+docker build -t bengky/libs -f Dockerfile .
+cd ../backend
 docker compose up --build
 ```
 
+## Migrating
+
+```bash
+alembic revision -m "initial"
+alembic upgrade head
+```
