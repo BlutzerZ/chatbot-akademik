@@ -9,7 +9,7 @@ import ChatPromptInput from "@/components/chat/ChatPromptInput";
 import Head from "next/head";
 import { useQuery } from "@tanstack/react-query";
 import client from "@/api/backend-client";
-import { fetchConversations, fetchMessages } from "@/api/messagesApi";
+import { fetchConversations, fetchMessages } from "@/app/api/messages/route";
 import { useRouter } from "next/navigation";
 
 type PageParams = {
@@ -103,6 +103,10 @@ export default function ChatContent() {
   const isLoading = false;
   const router = useRouter();
 
+  useEffect(() => {
+    document.title = "bngky";
+  }, []);
+
   //    FETCH CONVERSATIONS/HISTORY
   const {
     isPending: isConversationsPending,
@@ -140,6 +144,7 @@ export default function ChatContent() {
     }
   }, [messagesData]);
 
+  console.log(messagesData);
   //    HANDLE SEND/POST MESSAGE/PROMPT
   const handlePromptInput = async (prompt: string) => {
     if (!prompt.trim()) {
@@ -166,7 +171,16 @@ export default function ChatContent() {
         const newMessages = result.data.data as Message[];
         // console.log("HELLO WORLD");
         // console.log(newMessages);
-        newMessages.map((newMessage: Message) => {
+        // newMessages.map((newMessage: Message) => {
+        //   setMessages((prevMessages) => [...prevMessages, newMessage]);
+        // });
+
+        // Append messages one-by-one
+        newMessages.forEach((newMessage: Message, index) => {
+          if (index === 1) {
+            // For the second response, show the typewriter effect
+            typewriterEffect(newMessage);
+          }
           setMessages((prevMessages) => [...prevMessages, newMessage]);
         });
       } else {
@@ -199,6 +213,32 @@ export default function ChatContent() {
     }
   };
 
+  // Typewriter Effect
+  const typewriterEffect = (newMessage: Message) => {
+    const { content } = newMessage;
+    let currentContent = "";
+    let i = 0;
+
+    const interval = setInterval(() => {
+      if (i < content.length) {
+        currentContent += content[i];
+        i++;
+
+        // Append currentContent to messages
+        setMessages((prevMessages) => {
+          const updatedMessages = [...prevMessages];
+          updatedMessages[updatedMessages.length - 1] = {
+            ...newMessage,
+            content: currentContent,
+          };
+          return updatedMessages;
+        });
+      } else {
+        clearInterval(interval); // Stop the interval when all characters are typed
+      }
+    }, 10); // Adjust typing speed here (50ms per character)
+  };
+
   return (
     <>
       <Head>
@@ -210,7 +250,8 @@ export default function ChatContent() {
         activeChatId={chatId}
         className="flex h-screen flex-col gap-2"
       >
-        <div id="modal-root"></div>
+        <div id="report-modal-root"></div>
+        <div id="logout-modal-root"></div>
         <ChatHeader />
         {chatId === "new" ? (
           // <NewChat />
@@ -234,10 +275,15 @@ export default function ChatContent() {
               className="flex-1 overflow-y-auto"
               isMessagesLoading={isMessagesPending}
             />
+            {/* <ChatPromptInput
+              onPrompt={handlePromptInput}
+              isLoading={isLoading}
+              className="fixed-bottom z-10 w-full rounded-none bg-base-300 px-6 py-5 pt-3 md:px-14 lg:mx-auto lg:w-3/5 lg:pb-14"
+            /> */}
             <ChatPromptInput
               onPrompt={handlePromptInput}
               isLoading={isLoading}
-              className="relative z-10 w-full rounded-none bg-base-100 px-2 pb-5 pt-3 md:px-14 lg:mx-auto lg:w-3/5 lg:pb-14"
+              className="relative z-10 w-full rounded-none bg-base-100 px-6 py-24 pb-10 pt-3 md:px-14 lg:mx-auto lg:w-3/5 lg:pb-14"
             />
           </>
         )}

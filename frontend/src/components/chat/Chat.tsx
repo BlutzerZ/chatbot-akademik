@@ -17,18 +17,25 @@ const Chat: FC<Props> = (props) => {
         "flex flex-col-reverse content-center " + (props.className || "")
       }
     >
-      <div className="flex-1 px-5 pb-20 pt-5 md:px-36 lg:px-80">
-        {(props.messages || []).map((message, index) => (
-          <ChatMessageBubble
-            key={message.id || index}
-            id={message.id}
-            role={message.role}
-            content={message.content}
-            created_at={message.created_at}
-            // {...message}
-            onRate={(rating) => props.onRate?.(message.id, rating)}
-          />
-        ))}
+      <div className="flex-1 px-2 pb-10 pt-5 md:px-36 lg:px-80">
+        {(props.messages || [])
+          .slice() // Create a shallow copy to avoid mutating the original array
+          .sort(
+            (a, b) =>
+              new Date(a.created_at).getTime() -
+              new Date(b.created_at).getTime(),
+          ) // Sort by created_at
+          .map((message, index) => (
+            <ChatMessageBubble
+              key={message.id || index}
+              id={message.id}
+              role={message.role}
+              content={message.content}
+              created_at={message.created_at}
+              // {...message}
+              onRate={(rating) => props.onRate?.(message.id, rating)}
+            />
+          ))}
 
         {props.isMessagesLoading && (
           <>
