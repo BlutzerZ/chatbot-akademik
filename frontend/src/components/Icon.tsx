@@ -4,6 +4,7 @@ type Props = {
   name: string;
   outlined?: boolean;
   className?: string;
+  size?: number;
 };
 
 const Icon: FC<Props> = (props) => {
@@ -14,6 +15,7 @@ const Icon: FC<Props> = (props) => {
         (props.outlined ? " material-symbols-rounded-outlined" : "") +
         (props.className ? " " + props.className : "")
       }
+      style={{ fontSize: props.size + "px" }}
     >
       {props.name}
     </span>

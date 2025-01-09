@@ -7,7 +7,7 @@ import ToggleTheme from "@/components/ToggleTheme";
 import Head from "next/head";
 // import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FormEventHandler, useState } from "react";
+import { FormEventHandler, useEffect, useState } from "react";
 
 export default function SignInPage() {
   const [username, setUsername] = useState("");
@@ -15,6 +15,10 @@ export default function SignInPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    document.title = "bngky - Sign In";
+  }, []);
 
   const handleLogin: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
@@ -35,7 +39,7 @@ export default function SignInPage() {
         localStorage.setItem("token", token);
         router.push("/chat/new");
       } else {
-        alert("lol");
+        // alert("wrong pass");
         setError("Username atau password salah");
       }
 
@@ -136,15 +140,14 @@ export default function SignInPage() {
             <p className="w-full text-center">atau</p>
             <button
               onClick={handleLoginByGoogle}
-              className="btn mx-auto mb-4 h-14 w-fit justify-center px-14"
+              className="btn mx-auto mb-4 flex h-14 w-full items-center justify-center"
               disabled={loading}
             >
               {/* {loading ? "Memproses.." : "Login"} */}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                height="24"
                 viewBox="0 0 24 24"
-                width="24"
+                width="20"
               >
                 <path
                   d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
