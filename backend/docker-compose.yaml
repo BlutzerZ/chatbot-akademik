@@ -1,4 +1,8 @@
 services:
+  libs:
+    build:
+      context: ../libs
+
   db:
     container_name: db_academicchat
     image: postgres:latest
@@ -20,9 +24,10 @@ services:
     container_name: academicchat
     build: .
     volumes:
-      - .:/app
+      - .:/bengky/backend
       - ./media:/media
       - ./static:/static
+      - ./libs:/bengky/libs
     expose:
       - "${PORT}"
     ports:

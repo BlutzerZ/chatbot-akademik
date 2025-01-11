@@ -1,6 +1,7 @@
 # lang_engine
 
 Do the following in this order
+
 1. Set up environment variables
 2. Set up development
 3. Building the docs
@@ -8,8 +9,8 @@ Do the following in this order
 ## Set up chroma directory
 
 1. Get the chroma data from this [Google drive file](https://drive.google.com/file/d/1TaKowIBb4kvHPMJvaCbn37F_CnAzPpD5/view?usp=drive_link).
-2. Extract the contents in `/libs/lang-engine/`.
-3. When everything is done correctly, the sqlite3 file should be in `libs/lang-engine/chroma/chroma.sqlite3`.
+2. Extract the contents in `/libs/lang-engine/` or anywhere you want.
+3. Make sure you set the `CHROMA_PERSIST_PATH` in `.env` to the chroma directory containing the `chroma.sqlite3` file.
 
 ## Set up environment variables
 
@@ -20,6 +21,7 @@ Copy `.env.example` to a new file `.env`. Then fill `.env` appropriately.
 ## Set up development
 
 Make sure you've
+
 - filled the `.env` file,
 - and have setup the chroma directory.
 
