@@ -14,7 +14,7 @@ ENV PYTHONUNBUFFERED=1
 
 # Install the project requirements.
 COPY requirements.txt requirements.txt
-RUN pip install --no-cache-dir -r /requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Set this directory to be owned by the "wagtail" user. This Wagtail project
 # uses SQLite, the folder needs to be owned by the user that
@@ -48,5 +48,5 @@ USER academicchat
 #   phase facilities of your hosting platform. This is used only so the
 #   Wagtail instance can be started with a simple "docker run" command.
 # CMD set -xe; python manage.py migrate --noinput; gunicorn --bind 0.0.0.0:5001 wagtailSite.wsgi:application
-COPY ./entrypoint.sh /
-ENTRYPOINT ["sh", "/entrypoint.sh"]
+COPY entrypoint.sh entrypoint.sh
+ENTRYPOINT ["sh", "/bengky/backend/entrypoint.sh"]
